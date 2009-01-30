@@ -56,24 +56,25 @@ class AuPoilApp(object):
                 c.error = 'An error occur'
         else:
             c.new_url = resolve_relative_url('/%s' % alias, environ)
+        Session.remove()
         return c
 
     def __call__(self, environ, start_response):
         path_info = environ.get('PATH_INFO')[1:]
         meth = environ.get('REQUEST_METHOD')
-        if path_info:
-            if path_info.startswith('api'):
-                # api
-                pass
-            elif meth == 'GET':
-                # redirect
-                alias = path_info.split('/')[0]
-                url = meta.engine.execute(Url.__table__.select(Url.alias==alias))
-                resp = exc.HTTPFound(location='http://www.gawel.org')
-        elif meth == 'PUT':
+        if meth == 'PUT':
             req = Request(environ)
-            c = self.add(environ, req.body.strip())
-            return repr(c)
+            resp = Response()
+            resp.content_type = 'text/javascript'
+            resp.charset = 'utf-8'
+            alias = path_info and path_info.split('/')[0] or None
+            c = self.add(environ, req.body.strip(), alias)
+            resp.body = repr(c)
+        elif path_info and meth == 'GET':
+            # redirect
+            alias = path_info.split('/')[0]
+            url = meta.engine.execute(Url.__table__.select(Url.alias==alias))
+            resp = exc.HTTPFound(location='http://www.gawel.org')
         else:
             resp = Response()
             resp.content_type = 'text/html'

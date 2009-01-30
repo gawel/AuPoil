@@ -56,4 +56,14 @@ class TestBase(TestCase):
         resp = self.app.get('/%s' % alias)
         assert resp.headers.get('location') == 'http://www.gawel.org', resp
 
+    def test_put_alias(self):
+        resp = self.app.put('/gawel1', params='http://www.gawel.org')
+        resp.mustcontain("{'new_url': 'http://localhost/gawel1', 'code': 1}")
+
+        resp = self.app.put('/gawel1', params='http://www.gawel.org')
+        resp.mustcontain("{'code': 0, 'error': 'This alias already exist'}")
+
+    def test_put(self):
+        resp = self.app.put('/', params='http://www.gawel.org')
+        resp.mustcontain("{'new_url': 'http://localhost/", "', 'code': 1}")
 
