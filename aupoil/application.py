@@ -96,11 +96,11 @@ class AuPoilApp(object):
             resp = Response()
             resp.content_type = 'text/html'
             resp.charset = 'utf-8'
-            if meth == 'POST':
+            if meth == 'GET' and 'url=' in environ.get('QUERY_STRING'):
                 # save
                 req = Request(environ)
-                alias = req.POST.get('alias')
-                url = req.POST.get('url')
+                alias = req.GET.get('alias')
+                url = req.GET.get('url')
                 if url:
                     c = self.add(environ, url, alias)
                 else:

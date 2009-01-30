@@ -8,7 +8,7 @@
   </p>
 </form>
 %else:
-<form method="POST" action="">
+<form method="GET" action="">
   %if c.error:
     <p class="error">${c.error}</p>
   %endif
