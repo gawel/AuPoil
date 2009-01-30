@@ -3,6 +3,7 @@ from sqlalchemy import orm
 from sqlalchemy import exc as saexc
 from paste.request import resolve_relative_url
 from webob import Request, Response, exc
+from urlparse import urlparse
 from aupoil.model import Url
 from aupoil import meta
 import random
@@ -21,6 +22,7 @@ class AuPoilApp(object):
 
     def __init__(self, title='', debug=False, **conf):
         self.title = title
+        self.valid_schemes = set(['http', 'https', 'ftp'])
         self.debug = debug in ('true', True)
         directories = [dirname]
         if 'templates_path' in conf:
@@ -39,6 +41,21 @@ class AuPoilApp(object):
 
     def add(self, environ, url, alias=None):
         c = Params(code=0)
+        if not url:
+            c.error = 'You must provide an url'
+            c.code = 1
+            return c
+
+        parsed = urlparse(url)
+        if parsed.scheme not in self.valid_schemes:
+            c.error = 'You must provide a valid url. Supported schemes are %s' % ', '.join(self.valid_schemes)
+            c.code = 1
+            return c
+        elif not parsed.netloc:
+            c.error = 'You must provide a valid url.'
+            c.code = 1
+            return c
+
         id = alias and alias or self.random_alias
         sm = orm.sessionmaker(autoflush=True, autocommit=False, bind=meta.engine)
         Session = orm.scoped_session(sm)

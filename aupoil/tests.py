@@ -67,3 +67,13 @@ class TestBase(TestCase):
         resp = self.app.put('/', params='http://www.gawel.org')
         resp.mustcontain("{'new_url': 'http://localhost/", "', 'code': 0}")
 
+    def test_invalid_url(self):
+        resp = self.app.put('/', params='www.gawel.org')
+        resp.mustcontain("You must provide a valid url")
+
+        resp = self.app.put('/', params='ssh://www.gawel.org')
+        resp.mustcontain("You must provide a valid url")
+
+        resp = self.app.put('/', params='http:/www.gawel.org')
+        resp.mustcontain("You must provide a valid url")
+
