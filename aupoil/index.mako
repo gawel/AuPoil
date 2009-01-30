@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
 <%inherit file="/base.mako" />
+%if c.url:
+${c.url}
+%else:
 <form method="POST" action="">
-  <div>
-    <input type="text" name="url" />
-  </div>
-  <div>
-  <input type="text" name="alias" />
-  </div>
-  <div>
-  <input type="submit" name="GO!" />
-  </div>
+  <p>
+    <label>Url</label>
+    <input type="text" size="50" name="url" />
+    <label>Alias</label>
+    <input type="text" size="10" maxsize="25" name="alias" />
+    <br />
+    <input class="button" type="submit" />
+  </p>
 </form>
+%endif

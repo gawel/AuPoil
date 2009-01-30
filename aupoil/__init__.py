@@ -1,11 +1,19 @@
-#
+from paste.urlmap import URLMap
+from paste.urlparser import StaticURLParser
+from sqlalchemy import engine_from_config
 from aupoil import meta
 from aupoil import model
 
-def make_app(global_conf, **local_conf):
-    meta.engine = engine_from_config(conf, 'sqlalchemy.')
+def make_app(global_conf, **conf):
+    engine = engine_from_config(conf, 'sqlalchemy.')
     meta.engine = engine
     meta.metadata.bind = engine
     meta.metadata.create_all(checkfirst=True)
     from aupoil.application import AuPoilApp
-    return AuPoilApp(**local_conf)
+    app = AuPoilApp(**conf)
+    if 'templates_path' in conf:
+        map = URLMap()
+        map['/_static'] = StaticURLParser(conf['templates_path'])
+        map['/'] = app
+        return map
+    return app

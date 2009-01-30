@@ -1,8 +1,11 @@
-from sqlalchemy import engine_from_config
 from mako.lookup import TemplateLookup
-from paste.deploy import CONFIG
+from sqlalchemy import orm
+from sqlalchemy import exc as saexc
+from paste.request import resolve_relative_url
 from webob import Request, Response, exc
+from aupoil.model import Url
 from aupoil import meta
+import os
 
 dirname = os.path.dirname(__file__)
 
@@ -13,10 +16,15 @@ class Params(dict):
         self[attr] = value
 
 class AuPoilApp(object):
-    def __init__(self, **conf):
-        self.title = conf['title']
+
+    def __init__(self, title='', debug=False, **conf):
+        self.title = title
+        self.debug = debug in ('true', True)
+        directories = [dirname]
+        if 'templates_path' in conf:
+            directories.insert(0, conf['templates_path'])
         self.templates = TemplateLookup(
-                            directories=[dirname],
+                            directories=directories,
                             output_encoding='utf8',
                             default_filters=['decode.utf8'])
         self.index = self.templates.get_template('/index.mako')
@@ -26,12 +34,13 @@ class AuPoilApp(object):
         sm = orm.sessionmaker(autoflush=True, autocommit=False, bind=meta.engine)
         return orm.scoped_session(sm)
 
-    def __init__(environ, start_response):
-        path_info = environ.get('PATH_INFO')
+    def __call__(self, environ, start_response):
+        path_info = environ.get('PATH_INFO')[1:]
         meth = environ.get('REQUEST_METHOD')
         if path_info:
-            if path_info.startswith('/api'):
+            if path_info.startswith('api'):
                 # api
+                pass
             elif meth == 'GET':
                 # redirect
                 alias = path_info.split('/')[0]
@@ -47,13 +56,18 @@ class AuPoilApp(object):
             alias = req.POST.get('alias')
             url = req.POST.get('url')
             if url:
-                alias = alias and alias or random_alias()
+                id = alias and alias or random_alias()
                 Session = self.Session
-                Session.add(Url(alias=alias, url=url))
-                Session.commit()
-                host = req.script_name and '%s/%s' (self.host, req.script_name) or self.host
-                c.url = 'http://%s/%s' % (host, alias)
-        resp.unicode_body = self.index.render(c=c)
+                record = Url()
+                record.alias = id
+                record.url = url
+                Session.add(record)
+                try:
+                    Session.commit()
+                except saexc.IntegrityError:
+                    pass
+                c.url = resolve_relative_url('/%s' % alias, environ)
+        resp.body = self.index.render(c=c)
         return resp(environ, start_response)
 
 
