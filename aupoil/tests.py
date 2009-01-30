@@ -29,9 +29,7 @@ class TestBase(TestCase):
     def __init__(self, *args, **kwargs):
         wsgiapp = loadapp('config:%s' % config['__file__'])
         self.app = TestApp(wsgiapp)
-        #url._push_object(URLGenerator(config['routes.map'], environ))
         TestCase.__init__(self, *args, **kwargs)
-
 
     def test_alias(self):
         resp = self.app.get('/')

@@ -8,6 +8,8 @@ class Url(meta.Base):
     alias = sa.Column('alias', sa.String(25), primary_key=True)
     url = sa.Column('url', sa.String(255))
     date = sa.Column('date', sa.DateTime, default=datetime.now)
-    ip = sa.Column('ip', sa.String(15))
+    frame = sa.Column('frame', sa.Boolean, default=False)
+    zip = sa.Column('zip', sa.Boolean, default=False)
+    ip = sa.Column('ip', sa.String(64))
 
 

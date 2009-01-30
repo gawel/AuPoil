@@ -8,9 +8,12 @@ from aupoil.model import Url
 from aupoil import meta
 import random
 import string
+import re
 import os
 
 dirname = os.path.dirname(__file__)
+
+_re_alias = re.compile('^[A-Za-z0-9-_.]{1,}$')
 
 class Params(dict):
     def __getattr__(self, attr):
@@ -39,21 +42,24 @@ class AuPoilApp(object):
         return ''.join(random.sample(chars, 10))
 
     def add(self, environ, url, alias=None):
-        c = Params(code=0)
+        c = Params(code=1)
         if not url:
             c.error = 'You must provide an url'
-            c.code = 1
             return c
 
         parsed = urlparse(url)
         if parsed.scheme not in self.valid_schemes:
             c.error = 'You must provide a valid url. Supported schemes are %s' % ', '.join(self.valid_schemes)
-            c.code = 1
             return c
         elif not parsed.netloc:
             c.error = 'You must provide a valid url.'
-            c.code = 1
             return c
+
+        if alias and not _re_alias.match(alias):
+            c.error = 'Invalid alias. Valid chars are A-Za-z0-9-_.'
+            return c
+
+        c.code = 0
 
         id = alias and alias or self.random_alias
         sm = orm.sessionmaker(autoflush=True, autocommit=False, bind=meta.engine)
