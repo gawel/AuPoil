@@ -20,8 +20,7 @@ class Params(dict):
 
 class AuPoilApp(object):
 
-    def __init__(self, title='', debug=False, **conf):
-        self.title = title
+    def __init__(self, debug=False, **conf):
         self.valid_schemes = set(['http', 'https', 'ftp'])
         self.debug = debug in ('true', True)
         directories = [dirname]
