@@ -16,7 +16,7 @@ pkg_resources.working_set.add_entry(conf_dir)
 pkg_resources.require('Paste')
 pkg_resources.require('PasteScript')
 
-test_db = os.path.join(conf_dir, 'test.db')
+test_db = os.path.join(conf_dir, 'AuPoil', 'dev.db')
 if os.path.isfile(test_db):
     os.remove(test_db)
 
@@ -29,7 +29,31 @@ class TestBase(TestCase):
     def __init__(self, *args, **kwargs):
         wsgiapp = loadapp('config:%s' % config['__file__'])
         self.app = TestApp(wsgiapp)
-        url._push_object(URLGenerator(config['routes.map'], environ))
+        #url._push_object(URLGenerator(config['routes.map'], environ))
         TestCase.__init__(self, *args, **kwargs)
+
+
+    def test_alias(self):
+        resp = self.app.get('/')
+        form = resp.form
+        form['url'] = 'http://www.gawel.org'
+        form['alias'] = 'gawel'
+        resp = form.submit()
+        resp.mustcontain('http://localhost/gawel')
+
+        resp = self.app.get('/gawel')
+        assert resp.headers.get('location') == 'http://www.gawel.org', resp
+
+    def test_noalias(self):
+        resp = self.app.get('/')
+        form = resp.form
+        form['url'] = 'http://www.gawel.org'
+        resp = form.submit()
+        resp.mustcontain('http://localhost/')
+
+        form = resp.form
+        alias = form['url'].value.split('/')[-1]
+        resp = self.app.get('/%s' % alias)
+        assert resp.headers.get('location') == 'http://www.gawel.org', resp
 
 

@@ -5,6 +5,8 @@ from paste.request import resolve_relative_url
 from webob import Request, Response, exc
 from aupoil.model import Url
 from aupoil import meta
+import random
+import string
 import os
 
 dirname = os.path.dirname(__file__)
@@ -30,9 +32,31 @@ class AuPoilApp(object):
         self.index = self.templates.get_template('/index.mako')
 
     @property
-    def Session(self):
+    def random_alias(self):
+        chars = [s for s in string.digits+string.ascii_letters]
+        random.shuffle(chars)
+        return ''.join(random.sample(chars, 10))
+
+    def add(self, environ, url, alias=None):
+        c = Params(code=1)
+        id = alias and alias or self.random_alias
         sm = orm.sessionmaker(autoflush=True, autocommit=False, bind=meta.engine)
-        return orm.scoped_session(sm)
+        Session = orm.scoped_session(sm)
+        record = Url()
+        record.alias = id
+        record.url = url
+        Session.add(record)
+        try:
+            Session.commit()
+        except saexc.IntegrityError:
+            c.code = 0
+            if alias:
+                c.error = 'This alias already exist'
+            else:
+                c.error = 'An error occur'
+        else:
+            c.new_url = resolve_relative_url('/%s' % alias, environ)
+        return c
 
     def __call__(self, environ, start_response):
         path_info = environ.get('PATH_INFO')[1:]
@@ -44,30 +68,28 @@ class AuPoilApp(object):
             elif meth == 'GET':
                 # redirect
                 alias = path_info.split('/')[0]
-                url = meta.engine.execute(Url.__table__.select(alias=alias))
-                exc.HTTPFound(location='http://www.gawel.org')
-        resp = Response()
-        resp.content_type = 'text/html'
-        resp.charset = 'utf-8'
-        c = Params(title=self.title)
-        if meth == 'POST':
-            # save
+                url = meta.engine.execute(Url.__table__.select(Url.alias==alias))
+                resp = exc.HTTPFound(location='http://www.gawel.org')
+        elif meth == 'PUT':
             req = Request(environ)
-            alias = req.POST.get('alias')
-            url = req.POST.get('url')
-            if url:
-                id = alias and alias or random_alias()
-                Session = self.Session
-                record = Url()
-                record.alias = id
-                record.url = url
-                Session.add(record)
-                try:
-                    Session.commit()
-                except saexc.IntegrityError:
-                    pass
-                c.url = resolve_relative_url('/%s' % alias, environ)
-        resp.body = self.index.render(c=c)
+            c = self.add(environ, req.body.strip())
+            return repr(c)
+        else:
+            resp = Response()
+            resp.content_type = 'text/html'
+            resp.charset = 'utf-8'
+            if meth == 'POST':
+                # save
+                req = Request(environ)
+                alias = req.POST.get('alias')
+                url = req.POST.get('url')
+                if url:
+                    c = self.add(environ, url, alias)
+                else:
+                    c = Params(error='You must provide an url !')
+            else:
+                c = Params()
+            resp.body = self.index.render(c=c)
         return resp(environ, start_response)
 
 

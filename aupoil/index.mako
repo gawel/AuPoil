@@ -1,12 +1,20 @@
 # -*- coding: utf-8 -*-
 <%inherit file="/base.mako" />
-%if c.url:
-${c.url}
+%if c.new_url:
+<form>
+  <p>
+    <label>Here is your new url</label>
+    <input type="text" size="50" name="url" value="${c.new_url}" />
+  </p>
+</form>
 %else:
 <form method="POST" action="">
+  %if c.error:
+    <p class="error">${c.error}</p>
+  %endif
   <p>
     <label>Url</label>
-    <input type="text" size="50" name="url" />
+    <input type="text" size="50" name="url" value="${c.url}" />
     <label>Alias</label>
     <input type="text" size="10" maxsize="25" name="alias" />
     <br />
