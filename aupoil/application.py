@@ -77,6 +77,7 @@ class AuPoilApp(object):
             else:
                 c.error = 'An error occur'
         else:
+            c.url = url
             c.new_url = resolve_relative_url('/%s' % alias, environ)
         Session.remove()
         return c
@@ -92,7 +93,7 @@ class AuPoilApp(object):
             alias = path_info and path_info.split('/')[0] or None
             c = self.add(environ, req.body.strip(), alias)
             resp.body = repr(c)
-        elif path_info and meth == 'GET':
+        elif path_info:
             # redirect
             alias = path_info.split('/')[0]
             url = meta.engine.execute(Url.__table__.select(Url.alias==alias))

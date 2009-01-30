@@ -10,6 +10,12 @@
    HTML ELEMENTS
 ********************************************/ 
 
+.error {
+    background:#FF9966;
+    border: thin solid red;
+    color:red;
+}
+
 /* top elements */
 * { margin:0; 	padding: 0; }
 

@@ -33,7 +33,7 @@ class TestBase(TestCase):
 
     def test_alias(self):
         resp = self.app.get('/')
-        form = resp.form
+        form = resp.forms['aupoil_form']
         form['url'] = 'http://www.gawel.org'
         form['alias'] = 'gawel'
         resp = form.submit()
@@ -44,26 +44,26 @@ class TestBase(TestCase):
 
     def test_noalias(self):
         resp = self.app.get('/')
-        form = resp.form
+        form = resp.forms['aupoil_form']
         form['url'] = 'http://www.gawel.org'
         resp = form.submit()
         resp.mustcontain('http://localhost/')
 
-        form = resp.form
-        alias = form['url'].value.split('/')[-1]
+        form = resp.forms['aupoil_result_form']
+        alias = form['result'].value.split('/')[-1]
         resp = self.app.get('/%s' % alias)
         assert resp.headers.get('location') == 'http://www.gawel.org', resp
 
     def test_put_alias(self):
         resp = self.app.put('/gawel1', params='http://www.gawel.org')
-        resp.mustcontain("{'new_url': 'http://localhost/gawel1', 'code': 0}")
+        resp.mustcontain("{'url': 'http://www.gawel.org', 'new_url': 'http://localhost/gawel1', 'code': 0}")
 
         resp = self.app.put('/gawel1', params='http://www.gawel.org')
         resp.mustcontain("{'code': 1, 'error': 'This alias already exist'}")
 
     def test_put(self):
         resp = self.app.put('/', params='http://www.gawel.org')
-        resp.mustcontain("{'new_url': 'http://localhost/", "', 'code': 0}")
+        resp.mustcontain("{'url': 'http://www.gawel.org', 'new_url': 'http://localhost/", "', 'code': 0}")
 
     def test_invalid_url(self):
         resp = self.app.put('/', params='www.gawel.org')

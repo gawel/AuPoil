@@ -28,26 +28,24 @@
 	</div>
 		
 	<div id="menu">
-		<ul>
-			<li id="current"><a href="/">Home</a></li>
-			<li><a href="/_static/about.html">About</a></li>			
-		</ul>		
 	</div>					
 	
 	<div id="sidebar" >	
 	
-		<h1>Site Partners</h1>
-		<ul class="sidemenu">
-			<li><a href="http://www.toonux.org">Toonux</a></li>
-		</ul>
+      <div>&nbsp;</div>
 				
 	</div>
 		
 	<div id="main">
-
+    <p></p>	
+    <p></p>	
     ${self.body()}
     <p></p>	
+
     <p></p>	
+    <p>
+    <a href="/">a.pwal.fr</a> is a tiny url like which allow you to make url shorter
+    </p>
     <p></p>	
     <p></p>	
     <p></p>	
@@ -62,12 +60,10 @@
 <!-- footer starts here -->	
 	<div id="footer">
 		<div id="footer-content">
-		<div id="footer-right">
-			<a href="/">Home</a> |  	
-		</div>
-		
-		<div id="footer-left">
-			&copy; Copyright 2009 <strong>Gael Pasgrimaud</strong>&nbsp;	 
+		<div>
+      &copy; Copyright 2009 <a href="http://www.gawel.org/">Gael Pasgrimaud</a> |
+			Powered by: <a href="#">AuPoil</a> | 
+			Hosted by <a href="http://www.toonux.org">Toonux</a> |
 			Design by: <a href="http://www.styleshout.com/">styleshout</a> | 
 			Valid <a href="http://validator.w3.org/check/referer">XHTML</a> |
    		<a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a>
