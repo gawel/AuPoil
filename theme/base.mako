@@ -28,6 +28,11 @@
 	</div>
 		
 	<div id="menu">
+		<ul>
+      <li>
+        a.pwal.fr is a tiny url like which allow you to make url shorter
+			</li>			
+		</ul>		
 	</div>					
 	
 	<div id="sidebar" >	
@@ -40,13 +45,6 @@
     <p></p>	
     <p></p>	
     ${self.body()}
-    <p></p>	
-
-    <p></p>	
-    <p>
-    <a href="/">a.pwal.fr</a> is a tiny url like which allow you to make url shorter
-    </p>
-    <p></p>	
     <p></p>	
     <p></p>	
 	</div>	
@@ -63,7 +61,7 @@
 		<div>
       &copy; Copyright 2009 <a href="http://www.gawel.org/">Gael Pasgrimaud</a> |
 			Powered by: <a href="#">AuPoil</a> | 
-			Hosted by <a href="http://www.toonux.org">Toonux</a> |
+			Hosted by: <a href="http://www.toonux.org">Toonux</a> |
 			Design by: <a href="http://www.styleshout.com/">styleshout</a> | 
 			Valid <a href="http://validator.w3.org/check/referer">XHTML</a> |
    		<a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a>

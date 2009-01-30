@@ -220,6 +220,7 @@ form.search input.button {
 	float: left;
 	list-style: none;		
 	border-right: 1px solid #FFA500;
+    color:white;
 }
 #menu ul li a {
 	display: block;

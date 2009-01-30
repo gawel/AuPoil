@@ -18,7 +18,8 @@
     <input type="text" size="50" name="url" value="${not c.new_url and c.url or ''}" />
     <label>Alias</label>
     <input type="text" size="10" maxsize="25" name="alias" />
-    <br />
-    <input class="button" type="submit" />
+    <div style="text-align:center">
+      <input class="button" type="submit" />
+    </div>
   </p>
 </form>
