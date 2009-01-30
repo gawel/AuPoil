@@ -38,7 +38,7 @@ class AuPoilApp(object):
         return ''.join(random.sample(chars, 10))
 
     def add(self, environ, url, alias=None):
-        c = Params(code=1)
+        c = Params(code=0)
         id = alias and alias or self.random_alias
         sm = orm.sessionmaker(autoflush=True, autocommit=False, bind=meta.engine)
         Session = orm.scoped_session(sm)
@@ -49,7 +49,7 @@ class AuPoilApp(object):
         try:
             Session.commit()
         except saexc.IntegrityError:
-            c.code = 0
+            c.code = 1
             if alias:
                 c.error = 'This alias already exist'
             else:
