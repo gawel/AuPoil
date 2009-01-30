@@ -1,8 +1,12 @@
 from paste.urlmap import URLMap
+from paste.script.appinstall import Installer
 from paste.urlparser import StaticURLParser
 from sqlalchemy import engine_from_config
 from aupoil import meta
 from aupoil import model
+
+class AuPoilInstaller(Installer):
+    pass
 
 def make_app(global_conf, **conf):
     engine = engine_from_config(conf, 'sqlalchemy.')

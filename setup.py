@@ -25,5 +25,7 @@ setup(name='AuPoil',
       # -*- Entry points: -*-
       [paste.app_factory]
       main = aupoil:make_app
+      [paste.app_install]
+      main = aupoil:AuPoilInstaller
       """,
       )
