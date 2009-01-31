@@ -60,10 +60,17 @@ class AuPoilApp(object):
             c.error = 'Invalid alias. Valid chars are A-Za-z0-9-_.'
             return c
 
-        c.code = 0
+        if url.startswith(resolve_relative_url('/', environ)):
+            c.error = 'This is not very useful. right ?'
+            return c
 
         id = alias is not None and alias or self.random_alias
-        assert id is not None
+        if id is None:
+            c.error = "I'm not able to get a valid alias. Sorry."
+            return c
+
+        c.code = 0
+
         sm = orm.sessionmaker(autoflush=True, autocommit=False, bind=meta.engine)
         Session = orm.scoped_session(sm)
         record = Url()

@@ -4,7 +4,7 @@
 <form onsubmit="javascript: return false;" id="aupoil_result_form">
   <p>
     <label>Here is your new url for ${c.url}</label>
-    <input type="text" name="result" size="50" value="${c.new_url}" />
+    <input type="text" name="result" id="result" size="50" value="${c.new_url}" />
   </p>
 </form>
 <p></p>

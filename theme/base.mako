@@ -2,12 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
 <head>
-
-<meta name="Description" content="Information architecture, Web Design, Web Standards." />
-<meta name="Keywords" content="your, keywords" />
+<script language="javascript" src="http://www.google.com/jsapi"></script>
+<script language="javascript">
+  google.load("jquery", "1");
+</script>
+<meta name="Description" content="A tiny url like." />
+<meta name="Keywords" content="tinyurl like" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="Distribution" content="Global" />
-<meta name="Author" content="Erwin Aligam - ealigam@gmail.com" />
+<meta name="Author" content="Gael Pasgrimaud - gael@gawel.org" />
 <meta name="Robots" content="index,follow" />		
 
 <link rel="stylesheet" href="/_static/images/CitrusIsland.css" type="text/css" />
@@ -68,6 +71,11 @@
 		</div>	
 	</div>
 <!-- footer ends here -->	
-	
+<script language="javascript">
+  google.load("jquery", "1");
+  google.setOnLoadCallback(function() {
+    $('#result').focus().select()
+  });
+</script>
 </body>
 </html>
