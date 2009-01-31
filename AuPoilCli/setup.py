@@ -3,38 +3,31 @@ import sys, os
 
 version = '0.1'
 
-setup(name='AuPoil',
+setup(name='AuPoilCli',
       version=version,
-      description="A tinyurl like with REST interface",
+      description="AuPoil client",
       long_description="""\
 """,
       classifiers=[], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
-      keywords='wsgi',
+      keywords='',
       author='Gael Pasgrimaud',
       author_email='gael@gawel.org',
       url='',
-      namespace_packages = ['aupoil'],
       license='MIT',
       packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
+      namespace_packages = ['aupoil', 'aupoil.cli'],
       include_package_data=True,
-      zip_safe=False,
+      zip_safe=True,
       install_requires=[
           # -*- Extra requirements: -*-
           'setuptools',
           'Paste',
-          'PasteDeploy',
-          'PasteScript',
           'WebOb',
-          'Mako',
-          'SQLAlchemy>=0.5.0',
-          'pysqlite',
           'simplejson',
       ],
       entry_points="""
       # -*- Entry points: -*-
-      [paste.app_factory]
-      main = aupoil.entries:make_app
-      [paste.app_install]
-      main = aupoil.entries:AuPoilInstaller
+      [console_scripts]
+      aupoil = aupoil.cli.entries:main
       """,
       )

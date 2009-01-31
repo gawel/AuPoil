@@ -7,6 +7,7 @@ from webob import Request, Response, exc
 from urlparse import urlparse
 from aupoil.model import Url
 from aupoil import meta
+import simplejson
 import random
 import string
 import re
@@ -96,6 +97,7 @@ class AuPoilApp(object):
                 old_url = record[1]
                 if old_url == url:
                     c.error = '%s is already bind to %s/%s' % (url, host, old_alias)
+                    c.new_url = '%s/%s' % (host, old_alias)
                 elif old_alias == alias:
                     c.error = '%s/%s is already bind to %s' % (host, alias, old_url)
                 else:
@@ -125,7 +127,7 @@ class AuPoilApp(object):
                 c = self.add(environ, url, alias)
             else:
                 c = Params(error='You must provide an url !')
-            resp.body = repr(c)
+            resp.body = simplejson.dumps(c)
         elif path_info:
             # redirect
             alias = path_info.split('/')[0]
