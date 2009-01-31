@@ -114,7 +114,6 @@ class AuPoilApp(object):
 
     def __call__(self, environ, start_response):
         path_info = environ.get('PATH_INFO')[1:]
-        meth = environ.get('REQUEST_METHOD')
         if path_info.startswith('json'):
             req = Request(environ)
             resp = Response()
@@ -139,7 +138,7 @@ class AuPoilApp(object):
             resp = Response()
             resp.content_type = 'text/html'
             resp.charset = 'utf-8'
-            if meth == 'GET' and 'url=' in environ.get('QUERY_STRING'):
+            if 'url=' in environ.get('QUERY_STRING'):
                 # save
                 req = Request(environ)
                 alias = req.GET.get('alias')
