@@ -49,10 +49,12 @@ class AuPoilApp(object):
             return c
 
         parsed = urlparse(url)
-        if parsed.scheme not in self.valid_schemes:
+        scheme = parsed[0]
+        netloc = parsed[1]
+        if scheme not in self.valid_schemes:
             c.error = 'You must provide a valid url. Supported schemes are %s' % ', '.join(self.valid_schemes)
             return c
-        elif not parsed.netloc:
+        elif not netloc:
             c.error = 'You must provide a valid url.'
             return c
 
@@ -60,7 +62,11 @@ class AuPoilApp(object):
             c.error = 'Invalid alias. Valid chars are A-Za-z0-9-_.'
             return c
 
-        if url.startswith(resolve_relative_url('/', environ)):
+        host = resolve_relative_url('/', environ)
+        if host.endswith('/'):
+            host = host[:-1]
+
+        if url.startswith(host):
             c.error = 'This is not very useful. right ?'
             return c
 
@@ -89,9 +95,9 @@ class AuPoilApp(object):
                 old_alias = record[0]
                 old_url = record[1]
                 if old_url == url:
-                    c.error = '%s is already bind to %s' % (url, resolve_relative_url('/%s' % old_alias, environ))
+                    c.error = '%s is already bind to %s/%s' % (url, host, old_alias)
                 elif old_alias == alias:
-                    c.error = '%s is already bind to %s' % (resolve_relative_url(alias, environ), old_url)
+                    c.error = '%s/%s is already bind to %s' % (host, alias, old_url)
                 else:
                     c.error = str(url)
             elif alias:
@@ -100,7 +106,9 @@ class AuPoilApp(object):
                 c.error = 'An error occur'
         else:
             c.url = url
-            c.new_url = resolve_relative_url('/%s' % id, environ)
+            c.new_url = '%s/%s' % (host, id)
+        if c.error:
+            c.error = str(c.error)
         Session.remove()
         return c
 

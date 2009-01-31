@@ -63,7 +63,7 @@ class TestBase(TestCase):
         resp.mustcontain("{'code': 1, 'error': 'http://www.gawel.org is already bind to http://localhost/gawel'}")
 
         resp = self.app.put('/gawel_put', params='http://www.gawel.put2')
-        resp.mustcontain("{'code': 1, 'error': u'http://localhost/gawel_put is already bind to http://www.gawel.put'}")
+        resp.mustcontain("{'code': 1, 'error': 'http://localhost/gawel_put is already bind to http://www.gawel.put'}")
 
     def test_put(self):
         resp = self.app.put('/', params='http://www.noalias.put')
