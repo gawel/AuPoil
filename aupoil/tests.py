@@ -56,15 +56,18 @@ class TestBase(TestCase):
         assert resp.headers.get('Location') == 'http://www.gawel.nu', resp
 
     def test_put_alias(self):
-        resp = self.app.put('/gawel1', params='http://www.gawel.org')
-        resp.mustcontain("{'url': 'http://www.gawel.org', 'new_url': 'http://localhost/gawel1', 'code': 0}")
+        resp = self.app.put('/gawel_put', params='http://www.gawel.put')
+        resp.mustcontain("{'url': 'http://www.gawel.put', 'new_url': 'http://localhost/gawel_put', 'code': 0}")
 
-        resp = self.app.put('/gawel1', params='http://www.gawel.org')
-        resp.mustcontain("{'code': 1, 'error': 'This alias already exist'}")
+        resp = self.app.put('/gawel_put', params='http://www.gawel.org')
+        resp.mustcontain("{'code': 1, 'error': 'http://www.gawel.org is already bind to http://localhost/gawel'}")
+
+        resp = self.app.put('/gawel_put', params='http://www.gawel.put2')
+        resp.mustcontain("{'code': 1, 'error': u'http://localhost/gawel_put is already bind to http://www.gawel.put'}")
 
     def test_put(self):
-        resp = self.app.put('/', params='http://www.gawel.org')
-        resp.mustcontain("{'url': 'http://www.gawel.org', 'new_url': 'http://localhost/", "', 'code': 0}")
+        resp = self.app.put('/', params='http://www.noalias.put')
+        resp.mustcontain("{'url': 'http://www.noalias.put', 'new_url': 'http://localhost/","', 'code': 0}")
 
     def test_invalid_url(self):
         resp = self.app.put('/', params='www.gawel.org')

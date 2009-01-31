@@ -23,14 +23,14 @@
 	<div id="header">
 
 		<h1 id="logo">a.<span>pwal</span>.fr</h1> 
-		<h2 id="slogan">parceque m&ecirc;me les urls sont plus jolies nues...</h2>
+		<h2 id="slogan">parce que m&ecirc;me les urls sont plus jolies nues...</h2>
 					
 	</div>
 		
 	<div id="menu">
 		<ul>
       <li>
-        a.pwal.fr is a tiny url like which allow you to make url shorter
+        a.pwal.fr is a tinyurl like which allows you to make url shorter
 			</li>			
 		</ul>		
 	</div>					

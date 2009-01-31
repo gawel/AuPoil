@@ -1,4 +1,5 @@
 from mako.lookup import TemplateLookup
+import sqlalchemy as sa
 from sqlalchemy import orm
 from sqlalchemy import exc as saexc
 from paste.request import resolve_relative_url
@@ -74,6 +75,19 @@ class AuPoilApp(object):
         except saexc.IntegrityError:
             c.code = 1
             if alias:
+                record = meta.engine.execute(Url.__table__.select(sa.or_(Url.url==url, Url.alias==id))).fetchone()
+            else:
+                record = meta.engine.execute(Url.__table__.select(Url.url==url)).fetchone()
+            if url:
+                old_alias = record[0]
+                old_url = record[1]
+                if old_url == url:
+                    c.error = '%s is already bind to %s' % (url, resolve_relative_url('/%s' % old_alias, environ))
+                elif old_alias == alias:
+                    c.error = '%s is already bind to %s' % (resolve_relative_url(alias, environ), old_url)
+                else:
+                    c.error = str(url)
+            elif alias:
                 c.error = 'This alias already exist'
             else:
                 c.error = 'An error occur'
