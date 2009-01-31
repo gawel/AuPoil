@@ -13,7 +13,7 @@
   %if c.error:
     <p class="error">${c.error}</p>
   %endif
-  <p>
+  <div>
     <label>Url</label>
     <input type="text" size="50" name="url" value="${not c.new_url and c.url or ''}" />
     <label>Alias</label>
@@ -21,5 +21,5 @@
     <p style="text-align:center">
       <input class="button" type="submit" />
     </p>
-  </p>
+  </div>
 </form>
