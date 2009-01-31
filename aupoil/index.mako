@@ -9,7 +9,7 @@
 </form>
 <p></p>
 %endif
-<form method="GET" action="" id="aupoil_form">
+<form method="get" action="" id="aupoil_form">
   %if c.error:
     <p class="error">${c.error}</p>
   %endif
@@ -17,9 +17,9 @@
     <label>Url</label>
     <input type="text" size="50" name="url" value="${not c.new_url and c.url or ''}" />
     <label>Alias</label>
-    <input type="text" size="10" maxsize="25" name="alias" />
-    <div style="text-align:center">
+    <input type="text" size="10" maxlength="25" name="alias" />
+    <p style="text-align:center">
       <input class="button" type="submit" />
-    </div>
+    </p>
   </p>
 </form>
