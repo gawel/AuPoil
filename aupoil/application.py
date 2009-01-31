@@ -49,10 +49,12 @@ class AuPoilApp(object):
             return c
 
         parsed = urlparse(url)
-        if parsed.scheme not in self.valid_schemes:
+        scheme = parsed[0]
+        netloc = parsed[1]
+        if scheme not in self.valid_schemes:
             c.error = 'You must provide a valid url. Supported schemes are %s' % ', '.join(self.valid_schemes)
             return c
-        elif not parsed.netloc:
+        elif not netloc:
             c.error = 'You must provide a valid url.'
             return c
 
