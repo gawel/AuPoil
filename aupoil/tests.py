@@ -55,27 +55,27 @@ class TestBase(TestCase):
         resp = self.app.get('/%s' % alias)
         assert resp.headers.get('Location') == 'http://www.gawel.nu', resp
 
-    def test_put_alias(self):
-        resp = self.app.put('/gawel_put', params='http://www.gawel.put')
-        resp.mustcontain("{'url': 'http://www.gawel.put', 'new_url': 'http://localhost/gawel_put', 'code': 0}")
+    def test_json_alias(self):
+        resp = self.app.get('/json?alias=gawel_get&url=http://www.gawel.get')
+        resp.mustcontain("{'url': 'http://www.gawel.get', 'new_url': 'http://localhost/gawel_get', 'code': 0}")
 
-        resp = self.app.put('/gawel_put', params='http://www.gawel.org')
+        resp = self.app.get('/json?alias=gawel_get&url=http://www.gawel.org')
         resp.mustcontain("{'code': 1, 'error': 'http://www.gawel.org is already bind to http://localhost/gawel'}")
 
-        resp = self.app.put('/gawel_put', params='http://www.gawel.put2')
-        resp.mustcontain("{'code': 1, 'error': 'http://localhost/gawel_put is already bind to http://www.gawel.put'}")
+        resp = self.app.get('/json?alias=gawel_get&url=http://www.gawel.get2')
+        resp.mustcontain("{'code': 1, 'error': 'http://localhost/gawel_get is already bind to http://www.gawel.get'}")
 
-    def test_put(self):
-        resp = self.app.put('/', params='http://www.noalias.put')
-        resp.mustcontain("{'url': 'http://www.noalias.put', 'new_url': 'http://localhost/","', 'code': 0}")
+    def test_json(self):
+        resp = self.app.get('/json?url=http://www.noalias.get')
+        resp.mustcontain("{'url': 'http://www.noalias.get', 'new_url': 'http://localhost/","', 'code': 0}")
 
     def test_invalid_url(self):
-        resp = self.app.put('/', params='www.gawel.org')
+        resp = self.app.get('/json?url=www.gawel.org')
         resp.mustcontain("You must provide a valid url")
 
-        resp = self.app.put('/', params='ssh://www.gawel.org')
+        resp = self.app.get('/json?url=ssh://www.gawel.org')
         resp.mustcontain("You must provide a valid url")
 
-        resp = self.app.put('/', params='http:/www.gawel.org')
+        resp = self.app.get('/json?url=http:/www.gawel.org')
         resp.mustcontain("You must provide a valid url")
 

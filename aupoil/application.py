@@ -115,13 +115,17 @@ class AuPoilApp(object):
     def __call__(self, environ, start_response):
         path_info = environ.get('PATH_INFO')[1:]
         meth = environ.get('REQUEST_METHOD')
-        if meth == 'PUT':
+        if path_info.startswith('json'):
             req = Request(environ)
             resp = Response()
             resp.content_type = 'text/javascript'
             resp.charset = 'utf-8'
-            alias = path_info and path_info.split('/')[0] or None
-            c = self.add(environ, req.body.strip(), alias)
+            alias = req.GET.get('alias')
+            url = req.GET.get('url')
+            if url:
+                c = self.add(environ, url, alias)
+            else:
+                c = Params(error='You must provide an url !')
             resp.body = repr(c)
         elif path_info:
             # redirect
