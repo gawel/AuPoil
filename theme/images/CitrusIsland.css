@@ -23,7 +23,7 @@ body {
 	margin: 0; padding: 0;
 	font: 70%/1.5em  Verdana, Tahoma, Arial,sans-serif;
 	color: #333; 
-	background: #FFF url(/_static/bg.gif) repeat-x;	
+	background: #FFF url(/_static/images/bg.gif) repeat-x;	
 	text-align: center; 
 }
 
@@ -104,7 +104,7 @@ acronym {
 blockquote {
 	margin: 10px;
  	padding: 0 0 0 32px;  	
-  	background: #FAFAFA url(/_static/quote.gif) no-repeat 5px 10px !important; 
+  	background: #FAFAFA url(/_static/images/quote.gif) no-repeat 5px 10px !important; 
 	background-position: 8px 10px;
 	border: 1px solid #f2f2f2; 
 	border-left: 4px solid #FF9966;   
@@ -208,7 +208,7 @@ form.search input.button {
 /* menu */
 #menu {
 	clear: both;
-	background: #FF9966 url(/_static/menubg.gif) repeat-x;
+	background: #FF9966 url(/_static/images/menubg.gif) repeat-x;
 	height: 30px;
 	margin: 0;
 	font: bolder 1.2em/30px Tahoma, Verdana, Arial, Sans-Serif;		
@@ -230,11 +230,11 @@ form.search input.button {
 }
 #menu ul li a:hover {
   	color: #333;	
-	background: url(/_static/menu-hover-bg.gif) repeat-x;
+	background: url(/_static/images/menu-hover-bg.gif) repeat-x;
 }
 #menu ul li#current a {
 	color: #333;
-	background: url(/_static/menu-current-bg.gif) repeat-x;	
+	background: url(/_static/images/menu-current-bg.gif) repeat-x;	
 }
 
 /* sidebar */
@@ -252,7 +252,7 @@ form.search input.button {
 }
 #sidebar ul.sidemenu li {
 	border-bottom: 1px solid #EFF0F1;	
-	background: url(/_static/arrow.gif) no-repeat 3px 6px;	
+	background: url(/_static/images/arrow.gif) no-repeat 3px 6px;	
 	padding: 2px 5px 2px 20px;
 }
 
@@ -286,15 +286,15 @@ form.search input.button {
 	font-size: 95%;
 }
 .post-footer .date {
-	background: url(/_static/clock.gif) no-repeat left center;
+	background: url(/_static/images/clock.gif) no-repeat left center;
 	padding-left: 20px; margin: 0 10px 0 5px;
 }
 .post-footer .comments {
-	background: url(/_static/comment.gif) no-repeat left center;
+	background: url(/_static/images/comment.gif) no-repeat left center;
 	padding-left: 20px; margin: 0 10px 0 5px;
 }
 .post-footer .readmore {
-	background: url(/_static/page.gif) no-repeat left center;
+	background: url(/_static/images/page.gif) no-repeat left center;
 	padding-left: 20px; margin: 0 10px 0 5px;
 }
 
@@ -303,7 +303,7 @@ form.search input.button {
 	clear: both; 	
 	color: #666666; 	
 	padding: 0;	 
-	background: #FFF url(/_static/footerbg.gif) repeat-x;
+	background: #FFF url(/_static/images/footerbg.gif) repeat-x;
 	height: 60px
 }
 #footer a { 
