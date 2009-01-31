@@ -97,7 +97,10 @@ class AuPoilApp(object):
             # redirect
             alias = path_info.split('/')[0]
             url = meta.engine.execute(Url.__table__.select(Url.alias==alias))
-            resp = exc.HTTPFound(location='http://www.gawel.org')
+            if url:
+                resp = exc.HTTPFound(location=url)
+            else:
+                resp = exc.HTTPNotFound('This url does not exist')
         else:
             resp = Response()
             resp.content_type = 'text/html'
