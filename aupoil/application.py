@@ -61,7 +61,8 @@ class AuPoilApp(object):
 
         c.code = 0
 
-        id = alias and alias or self.random_alias
+        id = alias is not None and alias or self.random_alias
+        assert id is not None
         sm = orm.sessionmaker(autoflush=True, autocommit=False, bind=meta.engine)
         Session = orm.scoped_session(sm)
         record = Url()
@@ -78,7 +79,7 @@ class AuPoilApp(object):
                 c.error = 'An error occur'
         else:
             c.url = url
-            c.new_url = resolve_relative_url('/%s' % alias, environ)
+            c.new_url = resolve_relative_url('/%s' % id, environ)
         Session.remove()
         return c
 
@@ -96,9 +97,9 @@ class AuPoilApp(object):
         elif path_info:
             # redirect
             alias = path_info.split('/')[0]
-            url = meta.engine.execute(Url.__table__.select(Url.alias==alias))
+            url = meta.engine.execute(Url.__table__.select(Url.alias==alias)).fetchone()
             if url:
-                resp = exc.HTTPFound(location=url[0])
+                resp = exc.HTTPFound(location=str(url[1]))
             else:
                 resp = exc.HTTPNotFound('This url does not exist')
         else:

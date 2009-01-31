@@ -45,14 +45,15 @@ class TestBase(TestCase):
     def test_noalias(self):
         resp = self.app.get('/')
         form = resp.forms['aupoil_form']
-        form['url'] = 'http://www.gawel.org'
+        form['url'] = 'http://www.gawel.nu'
         resp = form.submit()
         resp.mustcontain('http://localhost/')
 
         form = resp.forms['aupoil_result_form']
         alias = form['result'].value.split('/')[-1]
+        assert alias is not None, form['result'].value
         resp = self.app.get('/%s' % alias)
-        assert resp.headers.get('location') == 'http://www.gawel.org', resp
+        assert resp.headers.get('Location') == 'http://www.gawel.nu', resp
 
     def test_put_alias(self):
         resp = self.app.put('/gawel1', params='http://www.gawel.org')
