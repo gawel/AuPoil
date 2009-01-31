@@ -98,7 +98,7 @@ class AuPoilApp(object):
             alias = path_info.split('/')[0]
             url = meta.engine.execute(Url.__table__.select(Url.alias==alias))
             if url:
-                resp = exc.HTTPFound(location=url)
+                resp = exc.HTTPFound(location=url[0])
             else:
                 resp = exc.HTTPNotFound('This url does not exist')
         else:
