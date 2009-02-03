@@ -124,13 +124,17 @@ class AuPoilApp(object):
             resp = Response()
             resp.content_type = 'text/javascript'
             resp.charset = 'utf-8'
+            callback = req.GET.get('callback')
             alias = req.GET.get('alias')
             url = req.GET.get('url')
             if url:
                 c = self.add(environ, url, alias)
             else:
                 c = Params(error='You must provide an url !')
-            resp.body = simplejson.dumps(c)
+            if callback:
+                resp.body = '%s(%s);' % (callback, simplejson.dumps(c))
+            else:
+                resp.body = simplejson.dumps(c)
         elif path_info:
             # redirect
             alias = path_info.split('/')[0]
