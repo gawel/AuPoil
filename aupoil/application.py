@@ -37,11 +37,10 @@ class AuPoilApp(object):
                             default_filters=['decode.utf8'])
         self.index = self.templates.get_template('/index.mako')
 
-    @property
-    def random_alias(self):
+    def random_alias(self, min_max=[4, 6]):
         chars = [s for s in string.digits+string.ascii_letters]
         random.shuffle(chars)
-        return ''.join(random.sample(chars, 10))
+        return ''.join(random.sample(chars, random.randint(*min_max)))
 
     def add(self, environ, url, alias=None):
         c = Params(code=1)
@@ -71,10 +70,14 @@ class AuPoilApp(object):
             c.error = 'This is not very useful. right ?'
             return c
 
-        id = alias is not None and alias or self.random_alias
-        if id is None:
-            c.error = "I'm not able to get a valid alias. Sorry."
-            return c
+        if alias is not None:
+            id = alias
+        else:
+            for i in [1,2,3]:
+                id = self.random_alias([5,10])
+                record = meta.engine.execute(sa.select([Url.alias], Url.alias==id)).fetchone()
+                if record is None:
+                    break
 
         c.code = 0
 
@@ -89,9 +92,9 @@ class AuPoilApp(object):
         except saexc.IntegrityError:
             c.code = 1
             if alias:
-                record = meta.engine.execute(Url.__table__.select(sa.or_(Url.url==url, Url.alias==id))).fetchone()
+                record = meta.engine.execute(sa.select([Url.alias, Url.url], sa.or_(Url.url==url, Url.alias==id))).fetchone()
             else:
-                record = meta.engine.execute(Url.__table__.select(Url.url==url)).fetchone()
+                record = meta.engine.execute(sa.select([Url.alias, Url.url], Url.url==url)).fetchone()
             if url:
                 old_alias = record[0]
                 old_url = record[1]
@@ -131,9 +134,10 @@ class AuPoilApp(object):
         elif path_info:
             # redirect
             alias = path_info.split('/')[0]
-            url = meta.engine.execute(Url.__table__.select(Url.alias==alias)).fetchone()
-            if url:
-                resp = exc.HTTPFound(location=str(url[1]))
+            url = meta.engine.execute(sa.select([Url.url], Url.alias==alias)).fetchone()
+            if url is not None:
+                resp = exc.HTTPFound(location=str(url[0]))
+                url.close()
             else:
                 resp = exc.HTTPNotFound('This url does not exist')
         else:
