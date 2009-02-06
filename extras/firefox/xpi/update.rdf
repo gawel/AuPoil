@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<RDF:RDF xmlns:em="http://www.mozilla.org/2004/em-rdf#"
+         xmlns:NC="http://home.netscape.com/NC-rdf#"
+         xmlns:RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <RDF:Seq RDF:about="rdf:#$PB7sD2">
+    <RDF:li RDF:resource="rdf:#$QB7sD2"/>
+    <RDF:li RDF:resource="rdf:#$.B7sD2"/>
+  </RDF:Seq>
+  <RDF:Description RDF:about="rdf:#$TB7sD2"
+                   em:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
+                   em:minVersion="3.0"
+                   em:maxVersion="3.0.*"
+                   em:updateLink="https://a.pwal.fr/firefox/a.pwal.fr0.1.xpi"
+                   em:updateInfoURL="http://a.pwal.fr/firefox/"
+                   em:updateHash="sha1:120a74d83063caa20ef49be5584a3dcd1c77d3a6" />
+  <RDF:Description RDF:about="urn:mozilla:extension:apwalfr@a.pwal.fr"
+                   em:signature="MIGTMA0GCSqGSIb3DQEBDQUAA4GBABW3cYXGrFMtQi4OvWm6c768+hGy0eEsRcnL+Dey1sXfHGF4xQNM4UGX/PLf+0WSZODif5d8PzGgaqq5DU3/BPokxnvRLxAFM4eCR6KNxJxAemykTBkR56PwD8eixJoRAV+i5jJ7N0LPYjtVk0PrSfXMpkOnICo3cWU26SBBQGOx">
+    <em:updates RDF:resource="rdf:#$PB7sD2"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="rdf:#$QB7sD2"
+                   em:version="0.1">
+    <em:targetApplication RDF:resource="rdf:#$TB7sD2"/>
+  </RDF:Description>
+</RDF:RDF>
