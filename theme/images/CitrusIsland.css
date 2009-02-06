@@ -345,6 +345,8 @@ form.search input.button {
 .clear  { clear: both; height:1px; overflow:hidden;}
 .green  { color: #75A54B; }
 
+.no_border {border:0px}
+
 .icons {
     padding:0 145px;
 }
