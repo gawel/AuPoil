@@ -85,3 +85,7 @@ class TestBase(TestCase):
         resp = self.app.get('/json?url=http://www.gawel.uni/R\xe9&alias=')
         resp.mustcontain('{"url": "http://www.gawel.uni/R%E9", "new_url": "http://localhost/', '", "code": 0}')
 
+    def test_longurl(self):
+        resp = self.app.get('/json?url=http://www.gawel.uni/R\xe9sultat'+255*'-')
+        resp.mustcontain('{"code": 1, "error": "Lamer !"}')
+
