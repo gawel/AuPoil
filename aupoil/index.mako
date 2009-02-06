@@ -7,7 +7,17 @@
     <input type="text" name="result" id="result" size="50" value="${c.new_url}" />
   </p>
 </form>
-<p></p>
+<p class="icons">
+<a id="twitter" href="http://twitter.com/home?status=${c.new_url}"
+   title="Fill your twitter status with this link">
+  Post on Twitter
+</a>
+<a id="facebook" href="http://www.facebook.com/share.php?u=${c.new_url}"
+   title="Share this link on facebook">
+  Post on Facebook
+</a>
+<div class="clear">&nbsp;</div>
+</p>
 %endif
 <form method="get" action="" id="aupoil_form">
   %if c.plugin:

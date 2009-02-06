@@ -27,6 +27,10 @@ body {
 	text-align: center; 
 }
 
+form {
+    width:400px;
+}
+
 /* links */
 a {
 	color: #F9864D; 
@@ -36,6 +40,10 @@ a {
 a:hover {
 	color: #575757;
 	background-color: inherit;
+}
+
+a img {
+    border:none;
 }
 
 /* headers */
@@ -334,6 +342,27 @@ form.search input.button {
 .align-right { text-align: right; }
 
 /* additional classes */
-.clear  { clear: both; }
+.clear  { clear: both; height:1px; overflow:hidden;}
 .green  { color: #75A54B; }
 
+.icons {
+    padding:0 145px;
+}
+.icons a img {
+    border: none;
+}
+
+#twitter, #facebook {
+    float:left;
+    overflow:hidden;
+    padding-top:48px;
+    width:48px;
+    height:0px !important;
+    display:block;
+}
+#twitter {
+    background: url('/_static/twitter-icon.jpg');
+}
+#facebook {
+    background: url('/_static/facebook-icon.jpg');
+}

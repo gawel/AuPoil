@@ -43,7 +43,8 @@ var apwalfr = {
   onMenuItemCommand: function(e) {
     var doc = window.content.document;
     var url = doc.location;
-    var src = 'http://localhost:5000';
+    // var src = 'http://localhost:5000';
+    var src = 'http://a.pwal.fr';
 
     jQuery('#apwalfr', doc).remove();
     jQuery('#apwalfr_close', doc).remove();
