@@ -3,7 +3,7 @@
  xmlns:em="http://www.mozilla.org/2004/em-rdf#">
   <Description about="urn:mozilla:install-manifest">
     <em:id>apwalfr@a.pwal.fr</em:id>
-    <em:name>a.pwal.fr</em:name>
+    <em:name>apwalfr</em:name>
     <em:version>1.0</em:version>
     <em:creator>Gael Pasgrimaud</em:creator>
     <em:targetApplication>
