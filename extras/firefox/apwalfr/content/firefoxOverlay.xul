@@ -35,12 +35,13 @@
   - 
   - ***** END LICENSE BLOCK ***** -->
 
-<?xml-stylesheet href="chrome://apwalfr/skin/overlay.css" type="text/css"?>
+<?xml-stylesheet href="chrome://apwalfr/content/overlay.css" type="text/css"?>
 <!DOCTYPE overlay SYSTEM "chrome://apwalfr/locale/apwalfr.dtd">
 <overlay id="apwalfr-overlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-  <script src="overlay.js"/>
-  <script type="application/x-javascript" src="jquery.js" />
+  <script src="chrome://apwalfr/content/jquery.js" />
+  <script src="chrome://apwalfr/content/overlay.js"/>
+
   <stringbundleset id="stringbundleset">
     <stringbundle id="apwalfr-strings" src="chrome://apwalfr/locale/apwalfr.properties"/>
   </stringbundleset>

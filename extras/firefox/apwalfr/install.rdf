@@ -4,7 +4,7 @@
   <Description about="urn:mozilla:install-manifest">
     <em:id>apwalfr@a.pwal.fr</em:id>
     <em:name>apwalfr</em:name>
-    <em:version>1.0</em:version>
+    <em:version>0.1</em:version>
     <em:creator>Gael Pasgrimaud</em:creator>
     <em:targetApplication>
       <Description>

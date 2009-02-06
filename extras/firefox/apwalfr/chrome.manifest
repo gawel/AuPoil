@@ -1,4 +1,2 @@
 content	apwalfr	content/
-locale	apwalfr	en-US	locale/en-US/
-skin	apwalfr	classic/1.0	skin/
 overlay	chrome://browser/content/browser.xul	chrome://apwalfr/content/firefoxOverlay.xul

@@ -8,11 +8,13 @@
   </p>
 </form>
 <p class="icons">
-<a id="twitter" href="http://twitter.com/home?status=${c.new_url}"
+<a id="twitter" target="_parent"
+   href="http://twitter.com/home?status=${c.new_url}"
    title="Fill your twitter status with this link">
   Post on Twitter
 </a>
-<a id="facebook" href="http://www.facebook.com/share.php?u=${c.new_url}"
+<a id="facebook" target="_parent"
+   href="http://www.facebook.com/share.php?u=${c.new_url}"
    title="Share this link on facebook">
   Post on Facebook
 </a>
