@@ -14,18 +14,21 @@
 <meta name="Robots" content="index,follow" />		
 
 <link rel="stylesheet" href="/_static/images/CitrusIsland.css" type="text/css" />
-	
+%if c.plugin:
+<link rel="stylesheet" href="/_static/images/ff.css" type="text/css" />
+%endif
 <title>a.pwal.fr</title>
 	
 </head>
 
 <body>
 <div id="wrap"><!-- wrap starts here -->
-		
 	<div id="header">
 
 		<h1 id="logo">a.<span>pwal</span>.fr</h1> 
-		<h2 id="slogan">parce que m&ecirc;me les URLs sont plus jolies nues...</h2>
+    <h2 id="slogan">
+        parce que m&ecirc;me les URLs sont plus jolies nues...
+    </h2>
 					
 	</div>
 		
@@ -44,11 +47,7 @@
 	</div>
 		
 	<div id="main">
-    <p></p>	
-    <p></p>	
     ${self.body()}
-    <p></p>	
-    <p></p>	
 	</div>	
 	
 	<div id="rightbar">
@@ -75,6 +74,13 @@
   google.load("jquery", "1");
   google.setOnLoadCallback(function() {
     $('#result').focus().select()
+    if ($('#plugin').length) {
+      if ($('#result').length) {
+        $('#aupoil_form').hide();
+      } else if ($('#url').val()) {
+        $('#alias').focus().select();
+      }
+    }
   });
 </script>
 </body>

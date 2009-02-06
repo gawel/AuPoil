@@ -1,0 +1,33 @@
+body {
+    background-image:none;
+}
+form {
+    width:400px;
+}
+#main {
+    padding:0;
+    margin:0;
+    width:400px;
+    float:none;
+}
+#wrap {
+    width:auto;
+}
+#footer,
+#menu,
+#slogan,
+#sidebar,
+#rightbar {
+    display:none;
+}
+#header h1#logo {
+    font-size:2em;
+    padding-left:10px;
+}
+#header {
+    height:2em;
+}
+.submit {
+    float:right;
+    margin-top:-3em;
+}

@@ -10,15 +10,18 @@
 <p></p>
 %endif
 <form method="get" action="" id="aupoil_form">
+  %if c.plugin:
+    <input type="hidden" id="plugin" name="p" value="${c.plugin}" />
+  %endif
   %if c.error:
     <p class="error">${c.error}</p>
   %endif
   <div>
     <label>Url</label>
-    <input type="text" size="50" name="url" value="${not c.new_url and c.url or ''}" />
+    <input type="text" size="50" name="url" id="url" value="${not c.new_url and c.url or ''}" />
     <label>Alias</label>
-    <input type="text" size="10" maxlength="25" name="alias" />
-    <p style="text-align:center">
+    <input type="text" size="10" maxlength="25" id="alias" name="alias" />
+    <p style="text-align:center" class="submit">
       <input class="button" type="submit" />
     </p>
   </div>

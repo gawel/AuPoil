@@ -146,11 +146,11 @@ class AuPoilApp(object):
                 resp = exc.HTTPNotFound('This url does not exist')
         else:
             resp = Response()
+            req = Request(environ)
             resp.content_type = 'text/html'
             resp.charset = 'utf-8'
-            if 'url=' in environ.get('QUERY_STRING'):
+            if req.GET.get('url'):
                 # save
-                req = Request(environ)
                 alias = req.GET.get('alias')
                 url = req.GET.get('url')
                 if url:
@@ -158,7 +158,8 @@ class AuPoilApp(object):
                 else:
                     c = Params(error='You must provide an url !')
             else:
-                c = Params()
+                c = Params(url=req.GET.get('post',''))
+            c.plugin = req.GET.get('p', False)
             resp.body = self.index.render(c=c)
         return resp(environ, start_response)
 
