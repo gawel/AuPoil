@@ -2,10 +2,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
 <head>
-<script language="javascript" src="http://www.google.com/jsapi"></script>
-<script language="javascript">
-  google.load("jquery", "1");
-</script>
 <meta name="Description" content="A tiny url like." />
 <meta name="Keywords" content="tinyurl like" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -14,9 +10,6 @@
 <meta name="Robots" content="index,follow" />		
 <link href="/_static/images/favicon.ico" rel="shortcut icon"/>
 <link rel="stylesheet" href="/_static/images/CitrusIsland.css" type="text/css" />
-%if c.plugin:
-<link rel="stylesheet" href="/_static/images/ff.css" type="text/css" />
-%endif
 <title>a.pwal.fr</title>
 </head>
 <body>
@@ -34,18 +27,34 @@
 		</ul>		
 	</div>					
 	
-	<div id="sidebar" >	
-      <div>&nbsp;</div>
-	</div>
-		
 	<div id="main">
-    ${self.body()}
-
-    <h1 id="help">Lost ? Get some <a href="/help.html">help</a> !</h1>
+    <h1>Seems you need some help. That's simple... !</h1>
+    <p>&nbsp;</p>
+    <table class="noborder" width="800">
+      <tr><td>
+        <img class="no_border" src="/_static/images/bookmark.jpg" />
+      </td<td>
+        <img src="/_static/images/screen_bookmark.png" />
+      </td></tr>
+      <tr><td colspan="2">&nbsp;</td></tr>
+      <tr><td>
+        <img class="no_border" src="/_static/images/sexy.jpg" />
+      </td<td>
+        <img src="/_static/images/screen_sexy.png" />
+      </td></tr>
+      <tr><td colspan="2">&nbsp;</td></tr>
+      <tr><td>
+        <img class="no_border" src="/_static/images/share.jpg" />
+      </td<td>
+        <img src="/_static/images/screen_share.png" />
+      </td></tr>
+      <tr><td colspan="2">&nbsp;</td></tr>
+      <tr><td colspan="2">
+        <h1>So ? You can do <a href="/">it</a> now !</h1>
+      </td></tr>
+    </table>
 	</div>	
 	
-	<div id="rightbar">
-	</div>		
 </div>
 	
 <div id="footer">
@@ -62,19 +71,5 @@
   </div>
   </div>	
 </div>
-
-<script language="javascript">
-  google.load("jquery", "1");
-  google.setOnLoadCallback(function() {
-    $('#result').focus().select()
-    if ($('#plugin').length) {
-      if ($('#result').length) {
-        $('#aupoil_form').hide();
-      } else if ($('#url').val()) {
-        $('#alias').focus().select();
-      }
-    }
-  });
-</script>
 </body>
 </html>
