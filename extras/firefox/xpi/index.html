@@ -14,9 +14,6 @@
 <meta name="Robots" content="index,follow" />		
 <link href="/_static/images/favicon.ico" rel="shortcut icon"/>
 <link rel="stylesheet" href="/_static/images/CitrusIsland.css" type="text/css" />
-%if c.plugin:
-<link rel="stylesheet" href="/_static/images/ff.css" type="text/css" />
-%endif
 <title>a.pwal.fr</title>
 </head>
 <body>
@@ -39,7 +36,13 @@
 	</div>
 		
 	<div id="main">
-    ${self.body()}
+    <h1>Firefox extension</h1>
+    <p>This extension add an icon (<img src="./icon.png" />) to your status bar.</p>
+    <p>A popup window show up when you click it to allow you to get a short url for the current page</p>
+    <p><img src="screenshot.png" /></p>
+
+    <h2>Install</h2>
+    <p>Click here to get latest version: <a href="./apwalfr-0.2.xpi">0.2</a></p>
 	</div>	
 	
 	<div id="rightbar">
