@@ -8,6 +8,7 @@ from urlparse import urlparse
 from aupoil.model import Url
 from aupoil import meta
 import simplejson
+import urllib
 import random
 import string
 import re
@@ -16,6 +17,8 @@ import os
 dirname = os.path.dirname(__file__)
 
 _re_alias = re.compile('^[A-Za-z0-9-_.]{1,}$')
+
+valid_chars = string.digits+string.ascii_letters
 
 class Params(dict):
     def __getattr__(self, attr):
@@ -38,7 +41,7 @@ class AuPoilApp(object):
         self.index = self.templates.get_template('/index.mako')
 
     def random_alias(self, min_max=[4, 6]):
-        chars = [s for s in string.digits+string.ascii_letters]
+        chars = [s for s in valid_chars]
         random.shuffle(chars)
         return ''.join(random.sample(chars, random.randint(*min_max)))
 
@@ -48,15 +51,23 @@ class AuPoilApp(object):
             c.error = 'You must provide an url'
             return c
 
+        if len(url) > 255:
+            c.error = 'Lamer !'
+            return c
+
         parsed = urlparse(url)
         scheme = parsed[0]
         netloc = parsed[1]
         if scheme not in self.valid_schemes:
             c.error = 'You must provide a valid url. Supported schemes are %s' % ', '.join(self.valid_schemes)
             return c
-        elif not netloc:
+        elif not netloc or [a for a in netloc if a not in valid_chars + '._-']:
             c.error = 'You must provide a valid url.'
             return c
+
+        host = '%s://%s' % (scheme, netloc)
+        url = url[len(host):]
+        url = '%s%s' % (host, urllib.quote(url))
 
         if alias and not _re_alias.match(alias):
             c.error = 'Invalid alias. Valid chars are A-Za-z0-9-_.'
@@ -70,7 +81,7 @@ class AuPoilApp(object):
             c.error = 'This is not very useful. right ?'
             return c
 
-        if alias is not None:
+        if alias:
             id = alias
         else:
             for i in [1,2,3]:
@@ -152,6 +163,7 @@ class AuPoilApp(object):
             if req.GET.get('url'):
                 # save
                 alias = req.GET.get('alias')
+                alias = alias and alias or None
                 url = req.GET.get('url')
                 if url:
                     c = self.add(environ, url, alias)

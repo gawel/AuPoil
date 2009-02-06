@@ -47,8 +47,9 @@
 
   <statusbar id="status-bar">
      <statusbarpanel id="status-apwalfr"
-         label="Pwal!"
-         tooltiptext="Get a short url for this page"
+         class="statusbarpanel-iconic"
+         image="chrome://apwalfr/content/icon.png"
+         tooltiptext="Get a short url for this page. Pwal it !"
          onclick="apwalfr.onMenuItemCommand(event)"
        />
   </statusbar>
