@@ -8,7 +8,12 @@
                    em:maxVersion="3.0.*"
                    em:updateLink="http://a.pwal.fr/firefox/apwalfr-0.2.xpi"
                    em:updateInfoURL="http://a.pwal.fr/firefox/"
-                   em:updateHash="sha1:120a74d83063caa20ef49be5584a3dcd1c77d3a6" />
+                   em:updateHash="sha1:1a08555c245b56184cc25add102c7101b3cefaa2" />
+  <RDF:Seq RDF:about="rdf:#$PB7sD2">
+    <RDF:li RDF:resource="rdf:#$QB7sD2"/>
+    <RDF:li RDF:resource="rdf:#$.B7sD2"/>
+    <RDF:li RDF:resource="rdf:#$RUSid3"/>
+  </RDF:Seq>
   <RDF:Description RDF:about="rdf:#$TB7sD2"
                    em:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
                    em:minVersion="3.0"
@@ -16,21 +21,16 @@
                    em:updateLink="http://a.pwal.fr/firefox/apwalfr-0.1.xpi"
                    em:updateInfoURL="http://a.pwal.fr/firefox/"
                    em:updateHash="sha1:120a74d83063caa20ef49be5584a3dcd1c77d3a6" />
-  <RDF:Seq RDF:about="rdf:#$PB7sD2">
-    <RDF:li RDF:resource="rdf:#$QB7sD2"/>
-    <RDF:li RDF:resource="rdf:#$.B7sD2"/>
-    <RDF:li RDF:resource="rdf:#$RUSid3"/>
-  </RDF:Seq>
-  <RDF:Description RDF:about="rdf:#$QB7sD2"
-                   em:version="0.1">
-    <em:targetApplication RDF:resource="rdf:#$TB7sD2"/>
-  </RDF:Description>
-  <RDF:Description RDF:about="urn:mozilla:extension:apwalfr@a.pwal.fr"
-                   em:signature="MIGTMA0GCSqGSIb3DQEBDQUAA4GBAKwxemiB4q9VAgY/Ja3QjQt4S4qPt2k3o04bvbe267V5VJjz0XqP+raPNpma44O94s4CRa0IZEMk/8d/1nj/XCfRfC0yUSNUHAXM0e8WiQ4UbJ6I/obMyycQqYWMr/ZyNZbuDybi/D6WR8joyQG/MF0DdAHEbrrd2QL3Lnf1TaqA">
-    <em:updates RDF:resource="rdf:#$PB7sD2"/>
-  </RDF:Description>
   <RDF:Description RDF:about="rdf:#$RUSid3"
                    em:version="0.2">
     <em:targetApplication RDF:resource="rdf:#$UUSid3"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="urn:mozilla:extension:apwalfr@a.pwal.fr"
+                   em:signature="MIGTMA0GCSqGSIb3DQEBDQUAA4GBACZVUL8T6vMWNBXT4cX7H+TMu49dvu3VXRMNbOA8FOGYYuTYqXu0Q8U1MeUldb+We/uTgpN0RU65RlPNGJlP98lxHI6cy9XdWUHKwSLJCVLVZQsRODBh81TyeiuF6cTFWV6GFvVfUbJvvV853QZElS0rsDW17vT9gGA63TSEEd3d">
+    <em:updates RDF:resource="rdf:#$PB7sD2"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="rdf:#$QB7sD2"
+                   em:version="0.1">
+    <em:targetApplication RDF:resource="rdf:#$TB7sD2"/>
   </RDF:Description>
 </RDF:RDF>
