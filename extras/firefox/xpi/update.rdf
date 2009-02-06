@@ -6,28 +6,28 @@
                    em:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
                    em:minVersion="3.0"
                    em:maxVersion="3.0.*"
-                   em:updateLink="https://a.pwal.fr/firefox/apwalfr-0.2.xpi"
-                   em:updateInfoURL="https://a.pwal.fr/firefox/"
-                   em:updateHash="sha1:78fc1d2887eda35b4ad2e3a0b60120ca271ce6e6" />
-  <RDF:Description RDF:about="rdf:#$TB7sD2"
-                   em:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
-                   em:minVersion="3.0"
-                   em:maxVersion="3.0.*"
-                   em:updateLink="https://a.pwal.fr/firefox/apwalfr-0.1.xpi"
+                   em:updateLink="http://a.pwal.fr/firefox/apwalfr-0.2.xpi"
                    em:updateInfoURL="http://a.pwal.fr/firefox/"
-                   em:updateHash="sha1:120a74d83063caa20ef49be5584a3dcd1c77d3a6" />
+                   em:updateHash="sha1:78fc1d2887eda35b4ad2e3a0b60120ca271ce6e6" />
   <RDF:Seq RDF:about="rdf:#$PB7sD2">
     <RDF:li RDF:resource="rdf:#$QB7sD2"/>
     <RDF:li RDF:resource="rdf:#$.B7sD2"/>
     <RDF:li RDF:resource="rdf:#$RUSid3"/>
   </RDF:Seq>
+  <RDF:Description RDF:about="rdf:#$TB7sD2"
+                   em:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
+                   em:minVersion="3.0"
+                   em:maxVersion="3.0.*"
+                   em:updateLink="http://a.pwal.fr/firefox/apwalfr-0.1.xpi"
+                   em:updateInfoURL="http://a.pwal.fr/firefox/"
+                   em:updateHash="sha1:120a74d83063caa20ef49be5584a3dcd1c77d3a6" />
+  <RDF:Description RDF:about="urn:mozilla:extension:apwalfr@a.pwal.fr"
+                   em:signature="MIGTMA0GCSqGSIb3DQEBDQUAA4GBACEEaFVa/CHa2Oe8EPl441fAc0LtqzaLT7h3V81au2P9DuxEQ2iJqE+t7BXCPeN0LPPHwiLtlcZLctieW2ti0iBMJLMUWrQ/3yN2LCUbxPqEBRibcC2q30ngXM9+q7JPOiy3OuKnRddDK1QjHq2tC9OyEPsZSUukBC5FpwYwc1lt">
+    <em:updates RDF:resource="rdf:#$PB7sD2"/>
+  </RDF:Description>
   <RDF:Description RDF:about="rdf:#$RUSid3"
                    em:version="0.2">
     <em:targetApplication RDF:resource="rdf:#$UUSid3"/>
-  </RDF:Description>
-  <RDF:Description RDF:about="urn:mozilla:extension:apwalfr@a.pwal.fr"
-                   em:signature="MIGTMA0GCSqGSIb3DQEBDQUAA4GBABhsLaZruZ2Ug7wPjri8cvUogWoZuJGT1eOFnXSxAq7MdhQnNRQGbVUlficEQdp7YMqnGXXn80nzzqGgfZmDlA+4K16mfWiihVcouqDDN9GP77GNSKvqlNKHhiIWUl1dXK0E9wL8nJjaRREHF0PuYmj864I/4EB9MUcQnq018YiW">
-    <em:updates RDF:resource="rdf:#$PB7sD2"/>
   </RDF:Description>
   <RDF:Description RDF:about="rdf:#$QB7sD2"
                    em:version="0.1">
