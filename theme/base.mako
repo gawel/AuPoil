@@ -63,6 +63,22 @@
   </div>	
 </div>
 
+%if not c.plugin:
+    <script type="text/javascript">
+      var blackout = '<div id="blackout"'+
+        'style="z-index:100000;text-align:center;position:absolute;top:0px;width:100%;height:1600px;background:black;">'+
+        '<h1 style="color:white;">Le Net francais risque de mourir le 4 mars</h1>'+
+        '<h1 style="color:white;">HADOPI / Filtrage de l\'Internet je dis NON ! </h1>'+
+        '<h1 style="color:white;">Cliquez sur l\'image ci-dessous pour en savoir plus</h1>'+
+        '<a href="http://www.laquadrature.net/HADOPI" title="HADOPI - Le Net en France : black-out"><img src="http://media.laquadrature.net/Quadrature_black-out_HADOPI_425x425px.gif" border="0" alt="HADOPI - Le Net en France : black-out" /></a><br/>'+
+        '<a href="#" style="color:white;" id="site_access">Cliquez ici pour acc&eacute;der &agrave; '+window.location.href+'</a>'+
+        '</div>';
+      jQuery(document).ready(function(){
+        jQuery('body').prepend(blackout);
+        jQuery('#site_access').click(function(){jQuery('#blackout').remove();return false;});
+      });
+    </script>
+%endif
 <script language="javascript">
   google.load("jquery", "1");
   google.setOnLoadCallback(function() {
