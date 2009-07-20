@@ -5,7 +5,7 @@ from sqlalchemy import exc as saexc
 from paste.request import resolve_relative_url
 from webob import Request, Response, exc
 from urlparse import urlparse
-from aupoil.model import Url
+from aupoil.model import Url, Stat
 from aupoil import meta
 import simplejson
 import urllib
@@ -39,6 +39,7 @@ class AuPoilApp(object):
                             output_encoding='utf8',
                             default_filters=['decode.utf8'])
         self.index = self.templates.get_template('/index.mako')
+        self.stats = self.templates.get_template('/stats.mako')
 
     def random_alias(self, min_max=[4, 6]):
         chars = [s for s in valid_chars]
@@ -146,15 +147,35 @@ class AuPoilApp(object):
                 resp.body = '%s(%s);' % (callback, simplejson.dumps(c))
             else:
                 resp.body = simplejson.dumps(c)
+        elif path_info.startswith('stats'):
+            resp = Response()
+            sm = orm.sessionmaker(autoflush=True, autocommit=False, bind=meta.engine)
+            Session = orm.scoped_session(sm)
+            dirnames = path_info.split('/')
+            if len(dirnames) > 1:
+                alias = dirnames[-1]
+                query = sa.select([Stat.alias, Stat.referer, sa.func.count(Stat.referer)],
+                                  Stat.alias==alias, group_by=Stat.referer)
+                c = Params(url=Session.query(Url).get(alias),
+                           results=meta.engine.execute(query).fetchall())
+                resp.body = self.stats.render(c=c)
         elif path_info:
             # redirect
+            sm = orm.sessionmaker(autoflush=True, autocommit=False, bind=meta.engine)
+            Session = orm.scoped_session(sm)
+
             alias = path_info.split('/')[0]
-            url = meta.engine.execute(sa.select([Url.url], Url.alias==alias)).fetchone()
+            url = Session.query(Url).get(alias)
             if url is not None:
-                resp = exc.HTTPFound(location=str(url[0]))
-                url.close()
+                record = Stat()
+                record.alias = alias
+                record.referer = environ.get('HTTP_REFERER', 'UNKOWN')
+                Session.add(record)
+                Session.commit()
+                resp = exc.HTTPFound(location=str(url.url))
             else:
                 resp = exc.HTTPNotFound('This url does not exist')
+            Session.remove()
         else:
             resp = Response()
             req = Request(environ)

@@ -89,3 +89,13 @@ class TestBase(TestCase):
         resp = self.app.get('/json?url=http://www.gawel.uni/R\xe9sultat'+255*'-')
         resp.mustcontain('{"code": 1, "error": "Lamer !"}')
 
+    def test_stats(self):
+        self.app.get('/json?alias=gawel_get&url=http://www.gawel.get')
+        self.app.get('/gawel_get', extra_environ={'HTTP_REFERER':'http://referer0.com'})
+        self.app.get('/gawel_get', extra_environ={'HTTP_REFERER':'http://referer0.com'})
+        self.app.get('/gawel_get', extra_environ={'HTTP_REFERER':'http://referer1.com'})
+        resp = self.app.get('/stats/gawel_get')
+        resp.mustcontain('<tr><td>http://referer0.com</td><td>2</td></tr>')
+        resp.mustcontain('<tr><td>http://referer1.com</td><td>1</td></tr>')
+
+
