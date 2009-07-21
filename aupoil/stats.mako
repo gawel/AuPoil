@@ -2,6 +2,7 @@
 <%inherit file="/base.mako" />
 <h1>Stats for ${c.url.alias} - <a href="${c.url.url}">${c.url.url}</a></h1>
 <table>
+<tr><th>Referer</th><th>Hits</th></tr>
 <%
 count = 0
 %>
