@@ -35,13 +35,27 @@
  * ***** END LICENSE BLOCK ***** */
 
 var apwalfr = {
+  _doc: null,
   onLoad: function() {
     // initialization code
     this.initialized = true;
   },
 
-  onMenuItemCommand: function(e) {
+  onMenuItemCommand: function(event) {
+    // load api
     var doc = window.content.document;
+    apwalfr._doc = doc;
+    if (jQuery('script#apwal-api').length == 0) {
+            var s = doc.createElement('script');
+            s.setAttribute('id', 'apwal-api');
+            s.setAttribute('src', 'http://a.pwal.fr/_static/api.js');
+            s.setAttribute('type', 'text/javascript');
+            doc.body.appendChild(s);
+    }
+
+    if (event.button != 0)
+        return;
+                         
     var url = doc.location;
     // var src = 'http://localhost:5000';
     var src = 'http://a.pwal.fr';
@@ -60,6 +74,19 @@ var apwalfr = {
                ' />' +
         '</iframe>'+
         '');
+  },
+  onShowStats: function(obj) {
+    var doc = apwalfr._doc;
+    jQuery('a[href^="http://a.pwal.fr/"]', doc).each(function() {
+            var link = jQuery(this);
+            var id = link.attr('href').split('/')[3];
+            jQuery('a#apwalfr_'+id).remove();
+            link.after(' <a id="apwalfr_'+id+'" href="http://a.pwal.fr/stats/'+id+'" target="_new"></span>');
+            var s = doc.createElement('script');
+            s.setAttribute('src', 'http://a.pwal.fr/json/stats/?callback=apwal.showStats&alias=DaKrew');
+            s.setAttribute('type', 'text/javascript');
+            doc.body.appendChild(s);
+    });
   }
 
 };

@@ -99,6 +99,6 @@ class TestBase(TestCase):
         resp.mustcontain('<tr><td><a href="http://referer1.com">http://referer1.com</a></td><td>1</td></tr>')
 
         resp = self.app.get('/json/stats/?alias=gawel_get')
-        resp.mustcontain('"url": "http://www.gawel.get"', '"alias": "gawel_get"', '"stats":', '{"count": 3, "referer": "Total"}]}')
+        resp.mustcontain('"url": "http://www.gawel.get"', '"alias": "gawel_get"', '"stats":', '"referer": "http://referer0.com')
 
 

@@ -139,6 +139,9 @@ class AuPoilApp(object):
         return c
 
     def get_stats(self, alias):
+        Session = orm.scoped_session(sm)
+        url = Session.query(Url).get(alias)
+        Session.close()
         query = sa.select([Stat.alias, Stat.referer, sa.func.count(Stat.referer)],
                           Stat.alias==alias, group_by=Stat.referer)
         results = meta.engine.execute(query).fetchall()
@@ -147,8 +150,8 @@ class AuPoilApp(object):
         total = 0
         for item in results:
             total += item.get('count', 0)
-        results.append(dict(referer='Total', count=total))
-        return results
+        c = Params(url=url.url, alias=url.alias, count=total, stats=results)
+        return c
 
     def __call__(self, environ, start_response):
         path_info = environ.get('PATH_INFO')[1:]
@@ -162,10 +165,7 @@ class AuPoilApp(object):
             url = req.GET.get('url')
             if path_info.startswith('json/stats'):
                 if alias:
-                    Session = orm.scoped_session(sm)
-                    url = Session.query(Url).get(alias)
-                    c = Params(url=url.url, alias=url.alias, stats=self.get_stats(alias))
-                    Session.close()
+                    c = self.get_stats(alias)
                 else:
                     c = Params(error='You must provide an alias !')
             else:
@@ -183,11 +183,7 @@ class AuPoilApp(object):
             dirnames = path_info.split('/')
             if len(dirnames) > 1:
                 alias = dirnames[-1]
-                query = sa.select([Stat.alias, Stat.referer, sa.func.count(Stat.referer)],
-                                  Stat.alias==alias, group_by=Stat.referer)
-                c = Params(url=Session.query(Url).get(alias),
-                           results=self.get_stats(alias))
-                resp.body = self.stats.render(c=c)
+                resp.body = self.stats.render(c=self.get_stats(alias))
         elif path_info:
             # redirect
             Session = orm.scoped_session(sm)

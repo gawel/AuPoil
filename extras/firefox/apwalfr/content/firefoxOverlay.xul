@@ -49,10 +49,14 @@
   <statusbar id="status-bar">
      <statusbarpanel id="status-apwalfr"
          class="statusbarpanel-iconic"
+         context="menu-apwalfr"
          image="chrome://apwalfr/content/icon.png"
          tooltiptext="Get a short url for this page. Pwal it !"
-         onclick="apwalfr.onMenuItemCommand(event)"
+         onmousedown="apwalfr.onMenuItemCommand(event)"
        />
+     <menupopup id="menu-apwalfr">
+         <menuitem label="Show stats" oncommand="apwalfr.onShowStats(this)" />
+     </menupopup>
   </statusbar>
   
 </overlay>
