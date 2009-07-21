@@ -16,12 +16,22 @@
          context="menu-apwalfr"
          image="chrome://apwalfr/content/icon.png"
          tooltiptext="Get a short url for this page. Pwal it !"
-         onmousedown="apwalfr.onMenuItemCommand(event)"
+         onmousedown="apwalfr.onMenuItemCommand(this, event)"
        />
      <menupopup id="menu-apwalfr">
+         <menuitem label="Show stats" oncommand="apwalfr.onShowStats(this)" />
+         <menuseparator/>
          <menuitem label="Post on Twitter" oncommand="apwalfr.onQuick(this, 'twitter')" />
          <menuitem label="Post on Facebook" oncommand="apwalfr.onQuick(this, 'fb')" />
-         <menuitem label="Show stats" oncommand="apwalfr.onShowStats(this)" />
+         <menuitem label="Show Popup" oncommand="apwalfr.onPopup(this)" />
+         <menuseparator/>
+         <menu label="Default action">
+            <menupopup id="action-apwalfr" onpopupshowing="apwalfr.onShowDefault(this)">
+                <menuitem value="twitter" name="apwalfr_action" label="Post on Twitter" oncommand="apwalfr.onSetDefault(this)" type="radio" />
+                <menuitem value="fb" name="apwalfr_action" label="Post on Facebook" oncommand="apwalfr.onSetDefault(this)" type="radio" />
+                <menuitem value="popup" name="apwalfr_action" label="Show Popup" oncommand="apwalfr.onSetDefault(this)" type="radio" />
+            </menupopup>
+         </menu>
      </menupopup>
   </statusbar>
   

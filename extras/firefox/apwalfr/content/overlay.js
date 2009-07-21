@@ -1,31 +1,68 @@
-var apwalfr = {
-  _doc: null,
-  serv: 'http://a.pwal.fr',
+var prefManager = Components.classes["@mozilla.org/preferences-service;1"]
+                                .getService(Components.interfaces.nsIPrefBranch);
 
-  onLoad: function() {
-    // initialization code
-    this.initialized = true;
+var apwalfr = {
+  doc: null,
+  serv: 'http://a.pwal.fr',
+  pref_key: 'extensions.apwalfr.',
+
+  getPref: function(key) {
+      return prefManager.getCharPref(this.pref_key+key);
+  },
+  setPref: function(key, value) {
+      prefManager.setCharPref(this.pref_key+key, value);
+  },
+  setDefaultPref: function(key, value) {
+      if (!this.getPref(key)) this.setPref(key, value);
   },
 
   addScript: function(url) {
-    var doc = apwalfr._doc;
+    var doc = this.doc;
     var s = doc.createElement('script');
     s.setAttribute('src', apwalfr.serv+url);
     s.setAttribute('type', 'text/javascript');
     doc.body.appendChild(s);
-  },    
+  },
 
-  onMenuItemCommand: function(event) {
+  onLoad: function() {
+    // initialization code
+    this.setDefaultPref('default_action', 'popup');
+
+    this.initialized = true;
+  },
+
+  onShowDefault: function(obj) {
+    var value = this.getPref('default_action');
+    for (var child = obj.firstChild; child; child = child.nextSibling) {
+        if (child.getAttribute('value') == value)
+            child.setAttribute('checked', 'true');
+    }
+  },
+
+  onSetDefault: function(obj) {
+    this.setPref('default_action', obj.getAttribute('value'));
+  },
+
+  onMenuItemCommand: function(obj, event) {
     // load api
     var doc = window.content.document;
-    apwalfr._doc = doc;
-    if (jQuery('script#apwal-api').length == 0) {
+    this.doc = doc;
+
+    if (jQuery('script[src$="/_static/api.js"]', doc).length == 0)
         apwalfr.addScript('/_static/api.js');
-    }
 
     if (event.button != 0)
         return;
-                         
+
+    var value = this.getPref('default_action');
+    if (value == 'popup')
+        apwalfr.onPopup(obj);
+    else
+        apwalfr.onQuick(obj, value);
+  },
+
+  onPopup: function() {
+    var doc = this.doc;
     var url = doc.location;
 
     jQuery('#apwalfr', doc).remove();
@@ -43,11 +80,13 @@ var apwalfr = {
         '</iframe>'+
         '');
   },
+
   onQuick: function(obj, type) {
-    apwalfr.addScript('/json/?callback=apwal.'+type+'Quick&url='+apwalfr._doc.location);
+    apwalfr.addScript('/json/?callback=apwal.'+type+'Quick&url='+this.doc.location);
   },
+
   onShowStats: function(obj) {
-    var doc = apwalfr._doc;
+    var doc = this.doc;
     jQuery('a.apwalfr_link', doc).remove();
     jQuery('a[href^="'+apwalfr.serv+'/"]', doc).each(function() {
             var link = jQuery(this);
@@ -57,5 +96,6 @@ var apwalfr = {
     });
   }
 
-};
+}
+
 window.addEventListener("load", function(e) { apwalfr.onLoad(e); }, false);
