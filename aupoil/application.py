@@ -20,6 +20,8 @@ _re_alias = re.compile('^[A-Za-z0-9-_.]{1,}$')
 
 valid_chars = string.digits+string.ascii_letters
 
+sm = orm.sessionmaker(autoflush=True, autocommit=False, bind=meta.engine)
+
 class Params(dict):
     def __getattr__(self, attr):
         return self.get(attr, '')
@@ -101,7 +103,6 @@ class AuPoilApp(object):
 
         c.code = 0
 
-        sm = orm.sessionmaker(autoflush=True, autocommit=False, bind=meta.engine)
         Session = orm.scoped_session(sm)
         record = Url()
         record.alias = id
@@ -137,6 +138,18 @@ class AuPoilApp(object):
         Session.remove()
         return c
 
+    def get_stats(self, alias):
+        query = sa.select([Stat.alias, Stat.referer, sa.func.count(Stat.referer)],
+                          Stat.alias==alias, group_by=Stat.referer)
+        results = meta.engine.execute(query).fetchall()
+        results = [dict(referer=i[1], count=i[2]) for i in results]
+        results.sort(cmp=lambda a, b: cmp(a['count'], b['count']))
+        total = 0
+        for item in results:
+            total += item.get('count', 0)
+        results.append(dict(referer='Total', count=total))
+        return results
+
     def __call__(self, environ, start_response):
         path_info = environ.get('PATH_INFO')[1:]
         if path_info.startswith('json'):
@@ -147,17 +160,25 @@ class AuPoilApp(object):
             callback = req.GET.get('callback')
             alias = req.GET.get('alias')
             url = req.GET.get('url')
-            if url:
-                c = self.add(environ, url, alias)
+            if path_info.startswith('json/stats'):
+                if alias:
+                    Session = orm.scoped_session(sm)
+                    url = Session.query(Url).get(alias)
+                    c = Params(url=url.url, alias=url.alias, stats=self.get_stats(alias))
+                    Session.close()
+                else:
+                    c = Params(error='You must provide an alias !')
             else:
-                c = Params(error='You must provide an url !')
+                if url:
+                    c = self.add(environ, url, alias)
+                else:
+                    c = Params(error='You must provide an url !')
             if callback:
                 resp.body = '%s(%s);' % (callback, simplejson.dumps(c))
             else:
                 resp.body = simplejson.dumps(c)
         elif path_info.startswith('stats'):
             resp = Response()
-            sm = orm.sessionmaker(autoflush=True, autocommit=False, bind=meta.engine)
             Session = orm.scoped_session(sm)
             dirnames = path_info.split('/')
             if len(dirnames) > 1:
@@ -165,11 +186,10 @@ class AuPoilApp(object):
                 query = sa.select([Stat.alias, Stat.referer, sa.func.count(Stat.referer)],
                                   Stat.alias==alias, group_by=Stat.referer)
                 c = Params(url=Session.query(Url).get(alias),
-                           results=meta.engine.execute(query).fetchall())
+                           results=self.get_stats(alias))
                 resp.body = self.stats.render(c=c)
         elif path_info:
             # redirect
-            sm = orm.sessionmaker(autoflush=True, autocommit=False, bind=meta.engine)
             Session = orm.scoped_session(sm)
 
             alias = path_info.split('/')[0]

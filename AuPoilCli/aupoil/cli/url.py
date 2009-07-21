@@ -37,3 +37,18 @@ def add(url, alias=None, server='http://a.pwal.fr'):
             raise ValueError(resp.body)
     return dict(code=1, error='Server error')
 
+def stats(url, alias=None, server='http://a.pwal.fr'):
+    app = Proxy(server)
+    req = Request.blank('/json/stats')
+    qs = 'url=%s' % url
+    if alias:
+        qs += '&alias=%s' % alias
+    req.environ['QUERY_STRING'] = qs
+    resp = req.get_response(app)
+    if resp.content_type.startswith('text/javascript'):
+        try:
+            return simplejson.loads(resp.body)
+        except ValueError:
+            raise ValueError(resp.body)
+    return dict(code=1, error='Server error')
+

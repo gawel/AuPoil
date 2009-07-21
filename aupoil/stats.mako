@@ -8,13 +8,12 @@ count = 0
 %>
 %for item in c.results:
 <%
-count += item[2]
+referer = item.get('referer')
 %>
-%if '//' in item[1]:
-<tr><td><a href="${item[1]}">${item[1]}</a></td><td>${item[2]}</td></tr>
+%if '//' in referer:
+<tr><td><a href="${referer}">${referer}</a></td><td>${item.get('count')}</td></tr>
 %else:
-<tr><td>${item[1]}</td><td>${item[2]}</td></tr>
+<tr><td>${referer}</td><td>${item.get('count')}</td></tr>
 %endif
 %endfor
-<tr><td>Total</td><td>${count}</td></tr>
 </table>
