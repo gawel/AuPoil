@@ -1,16 +1,19 @@
+from paste.request import resolve_relative_url
 from mako.lookup import TemplateLookup
 import sqlalchemy as sa
 from sqlalchemy import orm
 from sqlalchemy import exc as saexc
-from paste.request import resolve_relative_url
 from webob import Request, Response, exc
-from urlparse import urlparse
-from aupoil.model import Url, Stat
 from aupoil import meta
+from urlparse import urlparse
+from aupoil.model import Url
+from aupoil.model import Stat
+from aupoil.utils import Params
+from aupoil.utils import session
+from aupoil.utils import valid_chars
+from aupoil.utils import random_alias
 import simplejson
 import urllib
-import random
-import string
 import re
 import os
 
@@ -18,15 +21,21 @@ dirname = os.path.dirname(__file__)
 
 _re_alias = re.compile('^[A-Za-z0-9-_.]{1,}$')
 
-valid_chars = string.digits+string.ascii_letters
 
-sm = orm.sessionmaker(autoflush=True, autocommit=False, bind=meta.engine)
+@session
+def get_stats(alias, Session=None):
+    url = Session.query(Url).get(alias)
+    query = sa.select([Stat.alias, Stat.referer, sa.func.count(Stat.referer)],
+                      Stat.alias==alias, group_by=Stat.referer)
+    results = Session.execute(query).fetchall()
+    results = [dict(referer=i[1], count=i[2]) for i in results]
+    results.sort(cmp=lambda a, b: cmp(a['count'], b['count']))
+    total = 0
+    for item in results:
+        total += item.get('count', 0)
+    c = Params(url=url.url, alias=url.alias, count=total, stats=results)
+    return c
 
-class Params(dict):
-    def __getattr__(self, attr):
-        return self.get(attr, '')
-    def __setattr__(self, attr, value):
-        self[attr] = value
 
 class AuPoilApp(object):
 
@@ -43,12 +52,8 @@ class AuPoilApp(object):
         self.index = self.templates.get_template('/index.mako')
         self.stats = self.templates.get_template('/stats.mako')
 
-    def random_alias(self, min_max=[4, 6]):
-        chars = [s for s in valid_chars]
-        random.shuffle(chars)
-        return ''.join(random.sample(chars, random.randint(*min_max)))
-
-    def add(self, req, url, alias=None):
+    @session
+    def add(self, req, url=None, alias=None, Session=None):
         c = Params(code=1)
         if not url:
             c.error = 'You must provide an url'
@@ -96,14 +101,13 @@ class AuPoilApp(object):
             id = alias
         else:
             for i in [1,2,3]:
-                id = self.random_alias([5,10])
-                record = meta.engine.execute(sa.select([Url.alias], Url.alias==id)).fetchone()
+                id = random_alias([5,10])
+                record = Session.execute(sa.select([Url.alias], Url.alias==id)).fetchone()
                 if record is None:
                     break
 
         c.code = 0
 
-        Session = orm.scoped_session(sm)
         record = Url()
         record.alias = id
         record.url = url
@@ -135,34 +139,19 @@ class AuPoilApp(object):
             c.new_url = '%s/%s' % (host, id)
         if c.error:
             c.error = str(c.error)
-        Session.remove()
         return c
 
-    def get_stats(self, alias):
-        Session = orm.scoped_session(sm)
-        url = Session.query(Url).get(alias)
-        Session.close()
-        query = sa.select([Stat.alias, Stat.referer, sa.func.count(Stat.referer)],
-                          Stat.alias==alias, group_by=Stat.referer)
-        results = meta.engine.execute(query).fetchall()
-        results = [dict(referer=i[1], count=i[2]) for i in results]
-        results.sort(cmp=lambda a, b: cmp(a['count'], b['count']))
-        total = 0
-        for item in results:
-            total += item.get('count', 0)
-        c = Params(url=url.url, alias=url.alias, count=total, stats=results)
-        return c
-
-    def json(self, req, path_info):
+    def json(self, req):
         resp = Response()
         resp.content_type = 'text/javascript'
         resp.charset = 'utf-8'
-        callback = req.GET.get('callback')
-        alias = req.GET.get('alias')
-        url = req.GET.get('url')
+        alias = req.params.get('alias')
+        url = req.params.get('url')
+
+        path_info = req.path_info.lstrip('/')
         if path_info.startswith('json/stats'):
             if alias:
-                c = self.get_stats(alias)
+                c = get_stats(alias)
             else:
                 c = Params(error='You must provide an alias !')
         else:
@@ -170,19 +159,21 @@ class AuPoilApp(object):
                 c = self.add(req, url, alias)
             else:
                 c = Params(error='You must provide an url !')
+
+        callback = req.params.get('callback')
         if callback:
             resp.body = '%s(%s);' % (callback, simplejson.dumps(c))
         else:
             resp.body = simplejson.dumps(c)
         return resp
 
-    def redirect(self, req, path_info):
-        Session = orm.scoped_session(sm)
-
+    @session
+    def redirect(self, req, Session=None):
+        path_info = req.path_info.lstrip('/')
         alias = path_info.split('/')[0]
         url = Session.query(Url).get(alias)
         if url is not None:
-            if req.method.lower() in ('get', 'post'):
+            if req.method.lower() == 'get':
                 record = Stat()
                 record.alias = alias
                 record.referer = req.environ.get('HTTP_REFERER', 'UNKOWN')
@@ -191,23 +182,21 @@ class AuPoilApp(object):
             resp = exc.HTTPFound(location=str(url.url))
         else:
             resp = exc.HTTPNotFound('This url does not exist')
-        Session.remove()
         return resp
 
     def __call__(self, environ, start_response):
         req = Request(environ)
-        path_info = environ.get('PATH_INFO')[1:]
+        path_info = req.path_info.lstrip('/')
         if path_info.startswith('json'):
-            resp = self.json(req, path_info)
+            resp = self.json(req)
         elif path_info.startswith('stats'):
             resp = Response()
-            Session = orm.scoped_session(sm)
             dirnames = path_info.split('/')
             if len(dirnames) > 1:
                 alias = dirnames[-1]
-                resp.body = self.stats.render(c=self.get_stats(alias))
+                resp.body = self.stats.render(c=get_stats(alias))
         elif path_info:
-            resp = self.redirect(req, path_info)
+            resp = self.redirect(req)
         else:
             resp = Response()
             resp.content_type = 'text/html'
