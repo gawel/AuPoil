@@ -167,11 +167,12 @@ class AuPoilApp(object):
             alias = path_info.split('/')[0]
             url = Session.query(Url).get(alias)
             if url is not None:
-                record = Stat()
-                record.alias = alias
-                record.referer = environ.get('HTTP_REFERER', 'UNKOWN')
-                Session.add(record)
-                Session.commit()
+                if environ.get('REQUEST_METHOD', 'GET').lower() in ('get', 'post'):
+                    record = Stat()
+                    record.alias = alias
+                    record.referer = environ.get('HTTP_REFERER', 'UNKOWN')
+                    Session.add(record)
+                    Session.commit()
                 resp = exc.HTTPFound(location=str(url.url))
             else:
                 resp = exc.HTTPNotFound('This url does not exist')
