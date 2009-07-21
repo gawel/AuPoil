@@ -45,7 +45,7 @@ class TestBase(TestCase):
     def test_noalias(self):
         resp = self.app.get('/')
         form = resp.forms["aupoil_form"]
-        form["url"] = "http://www.gawel.nu"
+        form["url"] = "http://www.gawel.nu/?toto=true"
         resp = form.submit()
         resp.mustcontain('http://localhost/')
 
@@ -53,7 +53,7 @@ class TestBase(TestCase):
         alias = form["result"].value.split('/')[-1]
         assert alias is not None, form["result"].value
         resp = self.app.get("/%s" % alias)
-        assert resp.headers.get('Location') == "http://www.gawel.nu", resp
+        assert resp.headers.get('Location') == "http://www.gawel.nu/?toto=true", resp
 
     def test_json_alias(self):
         resp = self.app.get('/json?alias=gawel_get&url=http://www.gawel.get')
@@ -95,7 +95,7 @@ class TestBase(TestCase):
         self.app.get('/gawel_get', extra_environ={'HTTP_REFERER':'http://referer0.com'})
         self.app.get('/gawel_get', extra_environ={'HTTP_REFERER':'http://referer1.com'})
         resp = self.app.get('/stats/gawel_get')
-        resp.mustcontain('<tr><td>http://referer0.com</td><td>2</td></tr>')
-        resp.mustcontain('<tr><td>http://referer1.com</td><td>1</td></tr>')
+        resp.mustcontain('<tr><td><a href="http://referer0.com">http://referer0.com</a></td><td>2</td></tr>')
+        resp.mustcontain('<tr><td><a href="http://referer1.com">http://referer1.com</a></td><td>1</td></tr>')
 
 

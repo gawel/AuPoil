@@ -66,9 +66,17 @@ class AuPoilApp(object):
             c.error = 'You must provide a valid url.'
             return c
 
+        fragment = qs = ''
+        if '#' in url:
+            url, fragment = url.split('#', 1)
+            fragment = '#%s' % fragment
+        if '?' in url:
+            url, qs = url.split('?', 1)
+            qs = '?%s' % qs
+
         host = '%s://%s' % (scheme, netloc)
         url = url[len(host):]
-        url = '%s%s' % (host, urllib.quote(url))
+        url = '%s%s%s%s' % (host, urllib.quote(url), qs, fragment)
 
         if alias and not _re_alias.match(alias):
             c.error = 'Invalid alias. Valid chars are A-Za-z0-9-_.'
