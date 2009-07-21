@@ -48,7 +48,7 @@ class AuPoilApp(object):
         random.shuffle(chars)
         return ''.join(random.sample(chars, random.randint(*min_max)))
 
-    def add(self, environ, url, alias=None):
+    def add(self, req, url, alias=None):
         c = Params(code=1)
         if not url:
             c.error = 'You must provide an url'
@@ -84,7 +84,7 @@ class AuPoilApp(object):
             c.error = 'Invalid alias. Valid chars are A-Za-z0-9-_.'
             return c
 
-        host = resolve_relative_url('/', environ)
+        host = resolve_relative_url('/', req.environ)
         if host.endswith('/'):
             host = host[:-1]
 
@@ -117,8 +117,8 @@ class AuPoilApp(object):
             else:
                 record = meta.engine.execute(sa.select([Url.alias, Url.url], Url.url==url)).fetchone()
             if url:
-                old_alias = record[0]
-                old_url = record[1]
+                old_alias = record.alias
+                old_url = record.url
                 if old_url == url:
                     c.error = '%s is already bind to %s/%s' % (url, host, old_alias)
                     c.new_url = '%s/%s' % (host, old_alias)
@@ -153,30 +153,52 @@ class AuPoilApp(object):
         c = Params(url=url.url, alias=url.alias, count=total, stats=results)
         return c
 
+    def json(self, req, path_info):
+        resp = Response()
+        resp.content_type = 'text/javascript'
+        resp.charset = 'utf-8'
+        callback = req.GET.get('callback')
+        alias = req.GET.get('alias')
+        url = req.GET.get('url')
+        if path_info.startswith('json/stats'):
+            if alias:
+                c = self.get_stats(alias)
+            else:
+                c = Params(error='You must provide an alias !')
+        else:
+            if url:
+                c = self.add(req, url, alias)
+            else:
+                c = Params(error='You must provide an url !')
+        if callback:
+            resp.body = '%s(%s);' % (callback, simplejson.dumps(c))
+        else:
+            resp.body = simplejson.dumps(c)
+        return resp
+
+    def redirect(self, req, path_info):
+        Session = orm.scoped_session(sm)
+
+        alias = path_info.split('/')[0]
+        url = Session.query(Url).get(alias)
+        if url is not None:
+            if req.method.lower() in ('get', 'post'):
+                record = Stat()
+                record.alias = alias
+                record.referer = req.environ.get('HTTP_REFERER', 'UNKOWN')
+                Session.add(record)
+                Session.commit()
+            resp = exc.HTTPFound(location=str(url.url))
+        else:
+            resp = exc.HTTPNotFound('This url does not exist')
+        Session.remove()
+        return resp
+
     def __call__(self, environ, start_response):
+        req = Request(environ)
         path_info = environ.get('PATH_INFO')[1:]
         if path_info.startswith('json'):
-            req = Request(environ)
-            resp = Response()
-            resp.content_type = 'text/javascript'
-            resp.charset = 'utf-8'
-            callback = req.GET.get('callback')
-            alias = req.GET.get('alias')
-            url = req.GET.get('url')
-            if path_info.startswith('json/stats'):
-                if alias:
-                    c = self.get_stats(alias)
-                else:
-                    c = Params(error='You must provide an alias !')
-            else:
-                if url:
-                    c = self.add(environ, url, alias)
-                else:
-                    c = Params(error='You must provide an url !')
-            if callback:
-                resp.body = '%s(%s);' % (callback, simplejson.dumps(c))
-            else:
-                resp.body = simplejson.dumps(c)
+            resp = self.json(req, path_info)
         elif path_info.startswith('stats'):
             resp = Response()
             Session = orm.scoped_session(sm)
@@ -185,25 +207,9 @@ class AuPoilApp(object):
                 alias = dirnames[-1]
                 resp.body = self.stats.render(c=self.get_stats(alias))
         elif path_info:
-            # redirect
-            Session = orm.scoped_session(sm)
-
-            alias = path_info.split('/')[0]
-            url = Session.query(Url).get(alias)
-            if url is not None:
-                if environ.get('REQUEST_METHOD', 'GET').lower() in ('get', 'post'):
-                    record = Stat()
-                    record.alias = alias
-                    record.referer = environ.get('HTTP_REFERER', 'UNKOWN')
-                    Session.add(record)
-                    Session.commit()
-                resp = exc.HTTPFound(location=str(url.url))
-            else:
-                resp = exc.HTTPNotFound('This url does not exist')
-            Session.remove()
+            resp = self.redirect(req, path_info)
         else:
             resp = Response()
-            req = Request(environ)
             resp.content_type = 'text/html'
             resp.charset = 'utf-8'
             if req.GET.get('url'):
@@ -212,7 +218,7 @@ class AuPoilApp(object):
                 alias = alias and alias or None
                 url = req.GET.get('url')
                 if url:
-                    c = self.add(environ, url, alias)
+                    c = self.add(req, url, alias)
                 else:
                     c = Params(error='You must provide an url !')
             else:
