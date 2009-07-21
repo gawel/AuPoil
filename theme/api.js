@@ -8,13 +8,13 @@ var apwal = {
     },
     twitterQuick: function(data) {
         if (!data['error'])
-            window.location = "http://twitter.com/home?status="+data['url'];
+            window.location = "http://twitter.com/home?status="+data['new_url'];
         else
             alert(data['error']);
     },
     fbQuick: function(data) {
         if (!data['error'])
-            window.location = "http://www.facebook.com/share.php?u="+data['url'];
+            window.location = "http://www.facebook.com/share.php?u="+data['new_url'];
         else
             alert(data['error']);
     }
