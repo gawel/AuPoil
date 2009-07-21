@@ -55,6 +55,8 @@
          onmousedown="apwalfr.onMenuItemCommand(event)"
        />
      <menupopup id="menu-apwalfr">
+         <menuitem label="Quick Twit" oncommand="apwalfr.onQuick(this, 'twitter')" />
+         <menuitem label="Quick FB" oncommand="apwalfr.onQuick(this, 'fb')" />
          <menuitem label="Show stats" oncommand="apwalfr.onShowStats(this)" />
      </menupopup>
   </statusbar>

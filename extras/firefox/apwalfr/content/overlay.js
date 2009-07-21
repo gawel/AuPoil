@@ -75,6 +75,13 @@ var apwalfr = {
         '</iframe>'+
         '');
   },
+  onQuick: function(obj, type) {
+    var doc = apwalfr._doc;
+    var s = doc.createElement('script');
+    s.setAttribute('src', 'http://a.pwal.fr/json/stats/?callback=apwal.'+type+'Quick&url='+window.location.href);
+    s.setAttribute('type', 'text/javascript');
+    doc.body.appendChild(s);
+  }
   onShowStats: function(obj) {
     var doc = apwalfr._doc;
     jQuery('a[href^="http://a.pwal.fr/"]', doc).each(function() {
