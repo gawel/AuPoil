@@ -81,9 +81,9 @@ var apwalfr = {
             var link = jQuery(this);
             var id = link.attr('href').split('/')[3];
             jQuery('a#apwalfr_'+id).remove();
-            link.after(' <a id="apwalfr_'+id+'" href="http://a.pwal.fr/stats/'+id+'" target="_new"></span>');
+            link.after(' <a id="apwalfr_'+id+'" href="http://a.pwal.fr/stats/'+id+'" target="_blank"></a>');
             var s = doc.createElement('script');
-            s.setAttribute('src', 'http://a.pwal.fr/json/stats/?callback=apwal.showStats&alias=DaKrew');
+            s.setAttribute('src', 'http://a.pwal.fr/json/stats/?callback=apwal.showStats&alias='+id);
             s.setAttribute('type', 'text/javascript');
             doc.body.appendChild(s);
     });
