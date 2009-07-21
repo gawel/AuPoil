@@ -6,9 +6,8 @@
                    em:id="apwalfr@a.pwal.fr"
                    em:name="apwalfr"
                    em:version="0.3"
-                   em:updateURL="http://a.pwal.fr/firefox/update.rdf"
                    em:creator="Gael Pasgrimaud"
-                   em:updateKey="MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDTr0BnIU1/OEY9knwBpUPeAD8BmH6epebw5tZoiJ9rG96vnRNyzBypMiVCKUyBVJ/c7f8I7Ht9tdN1NKYW4MFealIugW4LQAf5InPMi9CWVlpbjOPIslJSfsHxwjMdS1yWsXNdVs3L6ShCZpEFVHT68PpN3bjES4P4G54Az9XMRQIDAQAB">
+                   >
     <em:targetApplication RDF:resource="rdf:#$KB7sD2"/>
   </RDF:Description>
   <RDF:Description RDF:about="rdf:#$KB7sD2"
