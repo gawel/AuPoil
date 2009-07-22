@@ -56,6 +56,9 @@ class TestBase(TestCase):
         assert resp.headers.get('Location') == "http://www.gawel.nu/?toto=true", resp
 
     def test_json_alias(self):
+        resp = self.app.get(u'/json?alias=gaw\xe9l&url=http://www.gawel.uni'.encode('utf-8'))
+        resp.mustcontain('{"url": "http://www.gawel.uni", "new_url": "http://localhost/gaw\u00e9l", "code": 0}'.encode('utf-8'))
+
         resp = self.app.get('/json?alias=gawel_get&url=http://www.gawel.get')
         resp.mustcontain('{"url": "http://www.gawel.get", "new_url": "http://localhost/gawel_get", "code": 0}')
 

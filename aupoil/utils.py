@@ -7,11 +7,12 @@ import string
 sm = orm.sessionmaker(autoflush=True, autocommit=False, bind=meta.engine)
 
 valid_chars = string.digits+string.ascii_letters
+valid_unicode = [unicode(c, 'utf-8') for c in valid_chars]
 
 def random_alias(min_max=[4, 6]):
-    chars = [s for s in valid_chars]
+    chars = [s for s in valid_unicode]
     random.shuffle(chars)
-    return ''.join(random.sample(chars, random.randint(*min_max)))
+    return u''.join(random.sample(chars, random.randint(*min_max)))
 
 def session(func):
     def wrapper(*args, **kwargs):

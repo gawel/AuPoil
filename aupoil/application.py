@@ -5,13 +5,13 @@ from sqlalchemy import orm
 from sqlalchemy import exc as saexc
 from webob import Request, Response, exc
 from aupoil import meta
-from urlparse import urlparse
 from aupoil.model import Url
 from aupoil.model import Stat
 from aupoil.utils import Params
 from aupoil.utils import session
 from aupoil.utils import valid_chars
 from aupoil.utils import random_alias
+from urlparse import urlparse
 import simplejson
 import urllib
 import re
@@ -24,6 +24,8 @@ _re_alias = re.compile('^[A-Za-z0-9-_.]{1,}$')
 
 @session
 def get_stats(alias, Session=None):
+    if isinstance(alias, str):
+        alias = alias.decode('utf-8')
     url = Session.query(Url).get(alias)
     query = sa.select([Stat.alias, Stat.referer, sa.func.count(Stat.referer)],
                       Stat.alias==alias, group_by=Stat.referer)
@@ -85,10 +87,6 @@ class AuPoilApp(object):
         url = url[len(host):]
         url = '%s%s%s%s' % (host, urllib.quote(url), qs, fragment)
 
-        if alias and not _re_alias.match(alias):
-            c.error = 'Invalid alias. Valid chars are A-Za-z0-9-_.'
-            return c
-
         host = resolve_relative_url('/', req.environ)
         if host.endswith('/'):
             host = host[:-1]
@@ -96,6 +94,12 @@ class AuPoilApp(object):
         if url.startswith(host):
             c.error = 'This is not very useful. right ?'
             return c
+
+        if isinstance(url, str):
+            url = url.decode('utf-8')
+
+        if isinstance(alias, str):
+            alias = alias.decode('utf-8')
 
         if alias:
             id = alias
@@ -136,9 +140,9 @@ class AuPoilApp(object):
                 c.error = 'An error occur'
         else:
             c.url = url
-            c.new_url = '%s/%s' % (host, id)
+            c.new_url = u'%s/%s' % (host, id)
         if c.error:
-            c.error = str(c.error)
+            c.error = c.error
         return c
 
     def json(self, req):
@@ -169,14 +173,14 @@ class AuPoilApp(object):
 
     @session
     def redirect(self, req, Session=None):
-        path_info = req.path_info.lstrip('/')
-        alias = path_info.split('/')[0]
+        path_info = req.path_info.strip('/')
+        alias = path_info.decode('utf-8')
         url = Session.query(Url).get(alias)
         if url is not None:
             if req.method.lower() == 'get':
                 record = Stat()
                 record.alias = alias
-                record.referer = req.environ.get('HTTP_REFERER', 'UNKOWN')
+                record.referer = req.environ.get('HTTP_REFERER', 'UNKOWN').decode('utf-8')
                 Session.add(record)
                 Session.commit()
             resp = exc.HTTPFound(location=str(url.url))
@@ -191,9 +195,9 @@ class AuPoilApp(object):
             resp = self.json(req)
         elif path_info.startswith('stats'):
             resp = Response()
-            dirnames = path_info.split('/')
-            if len(dirnames) > 1:
-                alias = dirnames[-1]
+            alias = [p for p in path_info.split('/')[1:] if p]
+            if alias:
+                alias = '/'.join(alias)
                 resp.body = self.stats.render(c=get_stats(alias))
         elif path_info:
             resp = self.redirect(req)
