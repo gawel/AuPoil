@@ -5,7 +5,7 @@
   <RDF:Description RDF:about="urn:mozilla:install-manifest"
                    em:id="apwalfr@a.pwal.fr"
                    em:name="apwalfr"
-                   em:version="0.3"
+                   em:version="0.4"
                    em:creator="Gael Pasgrimaud"
                    >
     <em:targetApplication RDF:resource="rdf:#$KB7sD2"/>
