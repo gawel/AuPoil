@@ -28,6 +28,8 @@ def make_app(global_conf, **conf):
 
 def main():
     parser = OptionParser()
+    parser.add_option("-a", "--all", dest="all", default=False,
+                      action="store_true", help="show all entries")
     parser.add_option("-l", "--latest", dest="latest",
                       action="count", help="show latest entries")
     parser.add_option("-d", "--delete", dest="delete",
@@ -43,6 +45,18 @@ def main():
                 Session.delete(stat)
             Session.delete(url)
             Session.commit()
-    if options.latest:
-        for url in Session.query(model.Url).order_by(model.Url.date.desc()).limit(options.latest*20).all():
+
+    query = None
+
+    if options.all:
+        query = Session.query(model.Url)
+    elif options.latest:
+        count = options.latest
+        count = count * range(20, 1000, 20)[count]
+        query = Session.query(model.Url).order_by(model.Url.date.desc()).limit(count)
+
+    if query is not None:
+        for url in query.all():
             print repr(url)
+
+    Session.close()
