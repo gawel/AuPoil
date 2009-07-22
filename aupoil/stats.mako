@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 <%inherit file="/base.mako" />
-<h1>Stats for ${c.alias} - <a href="${c.url}">${c.url}</a></h1>
+<h1>Stats for ${c.alias} - <a href="${c.url}">${c.url or c.error}</a></h1>
 <table>
 <tr><th>Referer</th><th>Hits</th></tr>
 <%

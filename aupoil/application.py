@@ -26,17 +26,22 @@ _re_alias = re.compile('^[A-Za-z0-9-_.]{1,}$')
 def get_stats(alias, Session=None):
     if isinstance(alias, str):
         alias = alias.decode('utf-8')
+
     url = Session.query(Url).get(alias)
+    if url is None:
+        return Params(error='Not found', alias=alias, count=0, stats=[])
+
     query = sa.select([Stat.alias, Stat.referer, sa.func.count(Stat.referer)],
                       Stat.alias==alias, group_by=Stat.referer)
     results = Session.execute(query).fetchall()
     results = [dict(referer=i[1], count=i[2]) for i in results]
     results.sort(cmp=lambda a, b: cmp(a['count'], b['count']))
+
     total = 0
     for item in results:
         total += item.get('count', 0)
-    c = Params(url=url.url, alias=url.alias, count=total, stats=results)
-    return c
+
+    return Params(url=url.url, alias=url.alias, count=total, stats=results)
 
 
 class AuPoilApp(object):

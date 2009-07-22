@@ -12,4 +12,6 @@ develop-eggs
 *.pyo
 *.log
 *.db
-
+*.pid
+*.back
+*.sql
