@@ -4,8 +4,6 @@ from aupoil import meta
 import random
 import string
 
-sm = orm.sessionmaker(autoflush=True, autocommit=False, bind=meta.engine)
-
 valid_chars = string.digits+string.ascii_letters
 valid_unicode = [unicode(c, 'utf-8') for c in valid_chars]
 
@@ -16,12 +14,12 @@ def random_alias(min_max=[4, 6]):
 
 def session(func):
     def wrapper(*args, **kwargs):
-        Session = orm.scoped_session(sm)
+        Session = meta.Session()
         kwargs['Session'] = Session
         try:
             value = func(*args, **kwargs)
         finally:
-            Session.remove()
+            Session.close()
         return value
     return wrapper
 

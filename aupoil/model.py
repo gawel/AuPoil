@@ -13,10 +13,16 @@ class Url(meta.Base):
     zip = sa.Column('zip', sa.Boolean, default=False)
     ip = sa.Column('ip', sa.String(64))
 
+    def __repr__(self):
+        return '%-3s %-30r %r' % (len(self.stats), self.alias , self.url[:80])
+
+    def __str__(self):
+        return self.url.encode('utf-8')
+
 class Stat(meta.Base):
     __tablename__ = 'stats'
     id = sa.Column('id', sa.Integer, primary_key=True)
     referer = sa.Column('referer', sa.Unicode(255), default='UNKOWN')
     alias = sa.Column('alias', sa.ForeignKey('urls.alias'))
-    url = orm.relation(Url, uselist=False)
+    url = orm.relation(Url, uselist=False, backref='stats')
 

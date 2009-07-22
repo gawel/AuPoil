@@ -36,5 +36,7 @@ setup(name='AuPoil',
       main = aupoil.entries:make_app
       [paste.app_install]
       main = aupoil.entries:AuPoilInstaller
+      [console_scripts]
+      aupoil_admin = aupoil.entries:main
       """,
       )
