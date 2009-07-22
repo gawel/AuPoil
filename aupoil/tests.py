@@ -98,8 +98,8 @@ class TestBase(TestCase):
         self.app.get('/gawel_get', extra_environ={'HTTP_REFERER':'http://referer0.com'})
         self.app.get('/gawel_get', extra_environ={'HTTP_REFERER':'http://referer1.com'})
         resp = self.app.get('/stats/gawel_get')
-        resp.mustcontain('<tr><td><a href="http://referer0.com">http://referer0.com</a></td><td>2</td></tr>')
-        resp.mustcontain('<tr><td><a href="http://referer1.com">http://referer1.com</a></td><td>1</td></tr>')
+        resp.mustcontain('<tr><td><a href="http://referer0.com" title="http://referer0.com">http://referer0.com</a></td><td>2</td></tr>')
+        resp.mustcontain('<tr><td><a href="http://referer1.com" title="http://referer1.com">http://referer1.com</a></td><td>1</td></tr>')
 
         resp = self.app.get('/json/stats/?alias=gawel_get')
         resp.mustcontain('"url": "http://www.gawel.get"', '"alias": "gawel_get"', '"stats":', '"referer": "http://referer0.com')

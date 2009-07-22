@@ -11,7 +11,7 @@ count = 0
 referer = item.get('referer')
 %>
 %if '//' in referer:
-<tr><td><a href="${referer}">${referer}</a></td><td>${item.get('count')}</td></tr>
+<tr><td><a href="${referer}" title="${referer}">${len(referer) > 80 and '%s...' % referer[:80] or referer}</a></td><td>${item.get('count')}</td></tr>
 %else:
 <tr><td>${referer}</td><td>${item.get('count')}</td></tr>
 %endif
