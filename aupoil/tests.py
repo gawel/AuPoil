@@ -56,7 +56,7 @@ class TestBase(TestCase):
         assert resp.headers.get('Location') == "http://www.gawel.nu/?toto=true", resp
 
     def test_json_alias(self):
-        resp = self.app.get(u'/json?alias=gaw\xe9l&url=http://www.gawel.uni'.encode('utf-8'))
+        resp = self.app.get('/json?alias=gawél&url=http://www.gawel.uni')
         resp.mustcontain('{"url": "http://www.gawel.uni", "new_url": "http://localhost/gaw\u00e9l", "code": 0}'.encode('utf-8'))
 
         resp = self.app.get('/json?alias=gawel_get&url=http://www.gawel.get')
@@ -83,13 +83,13 @@ class TestBase(TestCase):
         resp.mustcontain('You must provide a valid url')
 
     def test_unicode(self):
-        resp = self.app.get('/json?url=http://www.gawel.uni/R\xe9sultat&alias=')
-        resp.mustcontain('{"url": "http://www.gawel.uni/R%E9sultat", "new_url": "http://localhost/', '", "code": 0}')
-        resp = self.app.get('/json?url=http://www.gawel.uni/R\xe9&alias=')
-        resp.mustcontain('{"url": "http://www.gawel.uni/R%E9", "new_url": "http://localhost/', '", "code": 0}')
+        resp = self.app.get('/json?url=http://www.gawel.uni/Résultat&alias=')
+        resp.mustcontain('{"url": "http://www.gawel.uni/R\u00e9sultat", "new_url": "http://localhost/', '", "code": 0}')
+        resp = self.app.get('/json?url=http://www.gawel.uni/Ré&alias=')
+        resp.mustcontain('{"url": "http://www.gawel.uni/R\u00e9", "new_url": "http://localhost/', '", "code": 0}')
 
     def test_longurl(self):
-        resp = self.app.get('/json?url=http://www.gawel.uni/R\xe9sultat'+255*'-')
+        resp = self.app.get('/json?url=http://www.gawel.uni/Résultat'+255*'-')
         resp.mustcontain('{"code": 1, "error": "Lamer !"}')
 
     def test_stats(self):

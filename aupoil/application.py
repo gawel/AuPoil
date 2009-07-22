@@ -66,9 +66,7 @@ class AuPoilApp(object):
             c.error = 'Lamer !'
             return c
 
-        parsed = urlparse(url)
-        scheme = parsed[0]
-        netloc = parsed[1]
+        scheme, netloc, path_info, dummy, qs, fragment = urlparse(url)
         if scheme not in self.valid_schemes:
             c.error = 'You must provide a valid url. Supported schemes are %s' % ', '.join(self.valid_schemes)
             return c
@@ -76,26 +74,15 @@ class AuPoilApp(object):
             c.error = 'You must provide a valid url.'
             return c
 
-        fragment = qs = ''
-        if '#' in url:
-            url, fragment = url.split('#', 1)
-            fragment = '#%s' % fragment
-        if '?' in url:
-            url, qs = url.split('?', 1)
-            qs = '?%s' % qs
+        my_host = resolve_relative_url('/', req.environ)
+        if my_host.endswith('/'):
+            my_host = my_host[:-1]
 
-        host = '%s://%s' % (scheme, netloc)
-        url = url[len(host):]
-        url = '%s%s%s%s' % (host, urllib.quote(url), qs, fragment)
-
-        host = resolve_relative_url('/', req.environ)
-        if host.endswith('/'):
-            host = host[:-1]
-
-        if url.startswith(host):
+        if url.startswith(my_host):
             c.error = 'This is not very useful. right ?'
             return c
 
+        #url = url.replace(' ', '%20')
         if isinstance(url, str):
             url = url.decode('utf-8')
 
@@ -130,19 +117,19 @@ class AuPoilApp(object):
                 old_alias = record.alias
                 old_url = record.url
                 if old_url == url:
-                    c.error = '%s is already bind to %s/%s' % (url, host, old_alias)
-                    c.new_url = '%s/%s' % (host, old_alias)
+                    c.error = '%s is already bind to %s/%s' % (url, my_host, old_alias)
+                    c.new_url = u'%s/%s' % (my_host, old_alias)
                 elif old_alias == alias:
-                    c.error = '%s/%s is already bind to %s' % (host, alias, old_url)
+                    c.error = u'%s/%s is already bind to %s' % (my_host, alias, old_url)
                 else:
-                    c.error = str(url)
+                    c.error = url
             elif alias:
                 c.error = 'This alias already exist'
             else:
                 c.error = 'An error occur'
         else:
             c.url = url
-            c.new_url = u'%s/%s' % (host, id)
+            c.new_url = u'%s/%s' % (my_host, id)
         if c.error:
             c.error = c.error
         return c
