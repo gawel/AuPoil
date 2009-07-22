@@ -48,17 +48,17 @@ var apwalfr = {
     var doc = window.content.document;
     this.doc = doc;
 
-    if (jQuery('script[src$="/_static/api.js"]', doc).length == 0)
-        apwalfr.addScript('/_static/api.js');
+    if (jQuery('script[src="'+this.serv+'/_static/api.js"]', doc).length == 0)
+        this.addScript('/_static/api.js');
 
     if (event.button != 0)
         return;
 
     var value = this.getPref('default_action');
     if (value == 'popup')
-        apwalfr.onPopup(obj);
+        this.onPopup(obj);
     else
-        apwalfr.onQuick(obj, value);
+        this.onQuick(obj, value);
   },
 
   onPopup: function() {
@@ -82,7 +82,7 @@ var apwalfr = {
   },
 
   onQuick: function(obj, type) {
-    apwalfr.addScript('/json/?callback=apwal.'+type+'Quick&url='+this.doc.location);
+    this.addScript('/json/?callback=apwal.'+type+'Quick&url='+this.doc.location);
   },
 
   onShowStats: function(obj) {
@@ -90,7 +90,7 @@ var apwalfr = {
     jQuery('a.apwalfr_link', doc).remove();
     jQuery('a[href^="'+apwalfr.serv+'/"]', doc).each(function() {
             var link = jQuery(this);
-            var id = link.attr('href').split('/')[3];
+            var id = link.attr('href').replace(apwalfr.serv+'/');
             link.after(' <a id="apwalfr_'+id+'" class="apwalfr_link" href="'+apwalfr.serv+'/stats/'+id+'" target="_blank"></a>');
             apwalfr.addScript('/json/stats/?callback=apwal.showStats&alias='+id);
     });

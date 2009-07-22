@@ -14,13 +14,9 @@ from aupoil.utils import random_alias
 from urlparse import urlparse
 import simplejson
 import urllib
-import re
 import os
 
 dirname = os.path.dirname(__file__)
-
-_re_alias = re.compile('^[A-Za-z0-9-_.]{1,}$')
-
 
 @session
 def get_stats(alias, Session=None):
@@ -103,10 +99,11 @@ class AuPoilApp(object):
         if isinstance(url, str):
             url = url.decode('utf-8')
 
-        if isinstance(alias, str):
-            alias = alias.decode('utf-8')
-
         if alias:
+            for char in '\?& ':
+                alias = alias.replace(char, '-')
+            if isinstance(alias, str):
+                alias = alias.decode('utf-8')
             id = alias
         else:
             for i in [1,2,3]:
