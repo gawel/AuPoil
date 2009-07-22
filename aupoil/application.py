@@ -188,7 +188,7 @@ class AuPoilApp(object):
                 record.referer = req.environ.get('HTTP_REFERER', 'UNKOWN').decode('utf-8')
                 Session.add(record)
                 Session.commit()
-            resp = exc.HTTPFound(location=str(url.url))
+            resp = exc.HTTPFound(location=url.url.encode('utf-8'))
         else:
             resp = exc.HTTPNotFound('This url does not exist')
         return resp
