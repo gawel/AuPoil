@@ -13,7 +13,7 @@ def add(url, alias=None, server='http://a.pwal.fr'):
     scheme = parsed[0]
     netloc = parsed[1]
     if scheme not in valid_schemes:
-        print 'You must provide a valid url. Supported schemes are %s' % ', '.join(self.valid_schemes)
+        print 'You must provide a valid url. Supported schemes are %s' % ', '.join(valid_schemes)
         return
     elif not netloc:
         print 'You must provide a valid url.'

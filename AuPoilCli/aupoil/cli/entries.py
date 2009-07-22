@@ -9,10 +9,10 @@ parser.usage = usage
 parser.add_option("-a", "--alias", dest="alias",
                   action="store", default=None,
                   help="url's alias")
-parser.add_option("--stats", dest="stats",
+parser.add_option("-s", "--stats", dest="stats",
                   action="store_true", default=False,
                   help="print stats for url or alias")
-parser.add_option("-s", "--server", dest="server",
+parser.add_option("--server", dest="server",
                   action="store", default='http://a.pwal.fr',
                   help="server. default to a.pwal.fr")
 
@@ -30,7 +30,7 @@ def main():
                 print '%(referer)30s\t%(count)5s' % i
         elif result.get('error'):
             print result['error']
-    else:
+    elif value:
         result = url.add(value, options.alias, options.server)
         if 'new_url' in result:
             print result['new_url']
