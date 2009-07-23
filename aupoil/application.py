@@ -156,7 +156,11 @@ class AuPoilApp(object):
 
         callback = req.params.get('callback')
         if callback:
-            resp.body = '%s(%s);' % (callback, simplejson.dumps(c))
+            arg = req.params.get('arg')
+            if arg:
+                resp.body = '%s(%s, %s);' % (callback, simplejson.dumps(arg), simplejson.dumps(c))
+            else:
+                resp.body = '%s(%s);' % (callback, simplejson.dumps(c))
         else:
             resp.body = simplejson.dumps(c)
         return resp

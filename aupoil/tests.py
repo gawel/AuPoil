@@ -63,7 +63,8 @@ class TestBase(TestCase):
         resp.mustcontain('{"url": "http://www.gawel.get", "new_url": "http://localhost/gawel_get", "code": 0}')
 
         resp = self.app.get('/json?alias=gawel_get&url=http://www.gawel.org')
-        resp.mustcontain('{"new_url": "http://localhost/gawel", "code": 1, "error": "http://www.gawel.org is already bind to http://localhost/gawel"}')
+        resp.mustcontain('{"url": "http://www.gawel.org", "new_url": "http://localhost/gawel", "code": 1,',
+                         '"error": "http://www.gawel.org is already bind to http://localhost/gawel"}')
 
         resp = self.app.get('/json?alias=gawel_get&url=http://www.gawel.get2')
         resp.mustcontain('{"code": 1, "error": "http://localhost/gawel_get is already bind to http://www.gawel.get"}')
@@ -71,6 +72,13 @@ class TestBase(TestCase):
     def test_json(self):
         resp = self.app.get('/json?url=http://www.noalias.get')
         resp.mustcontain('{"url": "http://www.noalias.get", "new_url": "http://localhost/','", "code": 0}')
+
+    def test_json_callback(self):
+        resp = self.app.get('/json?url=http://www.callback.get&callback=myFunc')
+        resp.mustcontain('myFunc({"url": "http://www.callback.get", "new_url": "http://localhost/','", "code": 0});')
+
+        resp = self.app.get('/json?url=http://www.callback_arg.get&callback=myFunc&arg=myid')
+        resp.mustcontain('myFunc("myid", {"url": "http://www.callback_arg.get", "new_url": "http://localhost/','", "code": 0});')
 
     def test_invalid_url(self):
         resp = self.app.get('/json?url=www.gawel.org')
