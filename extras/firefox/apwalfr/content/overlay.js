@@ -11,6 +11,7 @@ var apwalfr = {
     ["Google", "Save to Google Bookmarks", "http://www.google.com/bookmarks/mark?op=edit&output=popup&bkmk=$u&title=$t", "google.png", 425, 0],
     ["LinkedIn", "Share on LinkedIn", "http://www.linkedin.com/shareArticle?mini=true&url=$u&title=$t", "linkedin.png", 1155, 0],
     ["MySpace", "Save to MySpace", "http://www.myspace.com/Modules/PostTo/Pages/?c=$u&t=$t", "myspace.png", 595, 0],
+    ['OnlineWire', "Save to OnlineWire", "http://www.onlywire.com/b/?u=$u&t=$t", "onlywire.png", 600, 0],
     ["Reddit", "Reddit", "http://reddit.com/submit?url=$u&title=$t", "reddit.png", 714, 0],
     ["Slashdot", "Slashdot It!", "http://slashdot.org/bookmark.pl?url=$u&title=$t", "slashdot.png", 799, 0],
     ["Technorati", "Add to my Technorati Favorites", "http://technorati.com/faves?add=$u", "technorati.png", 901, 0],
@@ -138,8 +139,9 @@ var apwalfr = {
         '');
   },
 
-  onQuick: function(obj) {
-    var type = obj.getAttribute("value");
+  onQuick: function(obj, type) {
+    if (!type)
+       type = obj.getAttribute("value");
     var url = null;
     jQuery.each(this.sites, function() {
         if (this[0] == type) url = this[2];

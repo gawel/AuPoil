@@ -8,7 +8,7 @@ var apwal = {
     },
     quickPost: function(url, data) {
         if (data['new_url']) {
-            url = url.replace('$t', '').replace('$u', data['new_url']);
+            url = url.replace('$t', encodeURIComponent(document.title)).replace('$u', data['new_url']);
             window.location = url;
         } else {
             alert(data['error']);
