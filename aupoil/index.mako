@@ -8,11 +8,12 @@
   </p>
 </form>
 <p class="icons">
-<a class="bookmarkify" style="display:none;" href="${c.url}"></a>
+<a class="bookmarkify" style="display:none;" title="${c.title}" href="${c.url}"></a>
 <div class="clear">&nbsp;</div>
 </p>
 %endif
 <form method="get" action="" id="aupoil_form">
+  <input type="hidden" id="title" name="p" value="${c.title}" />
   %if c.plugin:
     <input type="hidden" id="plugin" name="p" value="${c.plugin}" />
   %endif

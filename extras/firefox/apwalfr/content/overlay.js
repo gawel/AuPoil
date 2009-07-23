@@ -132,7 +132,7 @@ var apwalfr = {
              'style=z-index:1000001;float:left;top:55px;left:435px;position:fixed;border:0px;display:block;">' +
           '<img style="width:20px;height:20px;border:0px;" src="'+server+'/_static/images/close.png" />' +
         '</div>' +
-        '<iframe src="'+server+'/?p=firefox&post='+url+'" id="apwalfr"' +
+        '<iframe src="'+server+'/?p=firefox&title='+encodeURIComponent(doc.title)+'&post='+encodeURIComponent(url)+'" id="apwalfr"' +
                 'style="z-index:1000000;float:left;top:50px;left:30px;position:fixed;border:thin solid black; width:430px; height:230px;"' +
                ' />' +
         '</iframe>'+
