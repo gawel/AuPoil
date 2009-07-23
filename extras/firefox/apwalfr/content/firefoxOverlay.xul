@@ -21,14 +21,10 @@
      <menupopup id="menu-apwalfr">
          <menuitem label="Show stats" oncommand="apwalfr.onShowStats(this)" />
          <menuseparator/>
-         <menuitem label="Post on Twitter" oncommand="apwalfr.onQuick(this, 'twitter')" />
-         <menuitem label="Post on Facebook" oncommand="apwalfr.onQuick(this, 'fb')" />
-         <menuitem label="Show Popup" oncommand="apwalfr.onPopup(this)" />
-         <menuseparator/>
-         <menu label="Default action">
+         <menuitem id="popup-apwalfr" label="Show Popup" oncommand="apwalfr.onPopup(this)" type="radio" />
+         <menuseparator id="bookmark-sep-apwalfr"/>
+         <menu label="Default action" id="default-action-apwalfr">
             <menupopup id="action-apwalfr" onpopupshowing="apwalfr.onShowDefault(this)">
-                <menuitem value="twitter" name="apwalfr_action" label="Post on Twitter" oncommand="apwalfr.onSetDefault(this)" type="radio" />
-                <menuitem value="fb" name="apwalfr_action" label="Post on Facebook" oncommand="apwalfr.onSetDefault(this)" type="radio" />
                 <menuitem value="popup" name="apwalfr_action" label="Show Popup" oncommand="apwalfr.onSetDefault(this)" type="radio" />
             </menupopup>
          </menu>
