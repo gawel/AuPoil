@@ -348,8 +348,10 @@ form.search input.button {
 .no_border {border:0px}
 
 .icons {
-    padding:0 145px;
+    width:400px;
+    padding:0 15px;
 }
+.icons img,
 .icons a img {
     border: none;
 }

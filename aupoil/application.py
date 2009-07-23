@@ -118,6 +118,7 @@ class AuPoilApp(object):
                 old_url = record.url
                 if old_url == url:
                     c.error = '%s is already bind to %s/%s' % (url, my_host, old_alias)
+                    c.url = url
                     c.new_url = u'%s/%s' % (my_host, old_alias)
                 elif old_alias == alias:
                     c.error = u'%s/%s is already bind to %s' % (my_host, alias, old_url)

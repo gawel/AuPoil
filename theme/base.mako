@@ -63,8 +63,8 @@
   </div>	
 </div>
 
+<script language="javascript" src="/_static/bookmarkify.js"></script>
 <script language="javascript">
-  google.load("jquery", "1");
   google.setOnLoadCallback(function() {
     $('#result').focus().select()
     if ($('#plugin').length) {
@@ -74,6 +74,7 @@
         $('#alias').focus().select();
       }
     }
+    $('.bookmarkify').showBookmarksLinks({sites:PopularBookmarks});
   });
 </script>
 <script type="text/javascript">

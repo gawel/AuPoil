@@ -5,6 +5,7 @@ dist
 eggs
 parts
 develop-eggs
+theme/images/bookmarkify
 .installed.cfg
 *.egg-info
 *.swp

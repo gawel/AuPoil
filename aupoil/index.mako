@@ -8,16 +8,7 @@
   </p>
 </form>
 <p class="icons">
-<a id="twitter" target="_parent"
-   href="http://twitter.com/home?status=${c.new_url}"
-   title="Fill your twitter status with this link">
-  Post on Twitter
-</a>
-<a id="facebook" target="_parent"
-   href="http://www.facebook.com/share.php?u=${c.new_url}"
-   title="Share this link on facebook">
-  Post on Facebook
-</a>
+<a class="bookmarkify" style="display:none;" href="${c.url}"></a>
 <div class="clear">&nbsp;</div>
 </p>
 %endif
