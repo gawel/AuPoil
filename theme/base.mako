@@ -74,7 +74,7 @@
         $('#alias').focus().select();
       }
     }
-    $('.bookmarkify').showBookmarksLinks({sites:PopularBookmarks});
+    $('.bookmarkify').showBookmarksLinks();
   });
 </script>
 <script type="text/javascript">
