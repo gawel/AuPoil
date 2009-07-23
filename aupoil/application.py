@@ -210,7 +210,7 @@ class AuPoilApp(object):
                     c = Params(error='You must provide an url !')
             else:
                 c = Params(url=req.GET.get('post',''))
-            c.title = req.params.get('title', '')
+                c.title = req.params.get('title', '')
             c.plugin = req.params.get('p', False)
             resp.body = self.index.render(c=c)
         return resp(environ, start_response)
