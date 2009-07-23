@@ -10,8 +10,7 @@ jQuery.fn.extend({
         var url = clicked.attr('alt');
         $.getJSON(server+'/json/?callback=?&url='+href+'&alias='+alias, function(data) {
             var url = clicked.attr('alt').replace('$u', data['new_url']).replace('$t', title);
-            alert(url);
-            window.location.href = url;
+            window.top.location.href = url;
         });
         return false;
     },
@@ -30,7 +29,6 @@ jQuery.fn.extend({
 ["BuddyMarks", "BuddyMark It", "http://www.buddymarks.com/add_bookmark.php?bookmark_title=$t&amp;bookmark_url=$u", "buddymarks.png", 119, 0],
 ["BUMPzee!", "Save to BUMPzee!", "http://www.bumpzee.com/bump.php?u=$u", "bumpzee.png", 136, 0],
 ["CiteULike", "Save to CiteULike", "http://www.citeulike.org/posturl?url=$u&amp;title=$t", "citeulike.png", 153, 0],
-["co.mments", "Save to co.mments.com", "http://co.mments.com/track?url=$u&amp;title=$t", "comments.png", 170, 0],
 ["Connotea", "Save to Connotea", "http://www.connotea.org/addpopup?continue=confirm&amp;uri=$u&amp;title=$t", "connotea.png", 187, 0],
 ["del.icio.us", "Save to del.icio.us", "http://del.icio.us/post?url=$u&amp;title=$t", "delicious.png", 204, 0],
 ["Digg", "Digg It!", "http://digg.com/submit?phase=2&amp;url=$u&amp;title=$t", "digg.png", 221, 0],
