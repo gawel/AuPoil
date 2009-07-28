@@ -1,6 +1,10 @@
 var prefManager = Components.classes["@mozilla.org/preferences-service;1"]
                                 .getService(Components.interfaces.nsIPrefBranch);
 
+// jQuery.ajaxSetup({
+//     xhr: function() {return new XMLHttpRequest();}
+// });
+
 var apwalfr = {
   doc: null,
   pref_key: 'extensions.apwalfr.',
@@ -30,12 +34,12 @@ var apwalfr = {
       try {this.getPref(key);} catch(e) {this.setPref(key, value);}
   },
 
-  addScript: function(url) {
-    var doc = this.doc;
-    var s = doc.createElement('script');
-    s.setAttribute('src', this.getPref('server')+url);
-    s.setAttribute('type', 'text/javascript');
-    doc.body.appendChild(s);
+  setDefaultLabel: function(obj) {
+      document.getElementById("default-action-apwalfr").setAttribute('label', 'Default action: '+obj.getAttribute("label"));
+  },
+
+  getJSON: function(url, callback) {
+      jQuery.getJSON(this.getPref('server')+url+'&callback=?', callback);
   },
 
   createMenuItem: function(site, name, command) {
@@ -47,7 +51,7 @@ var apwalfr = {
     item.setAttribute("oncommand", command)
     item.setAttribute("name", name);
     item.setAttribute("type", "radio");
-    return item
+    return item;
   },
 
   onLoad: function() {
@@ -74,7 +78,7 @@ var apwalfr = {
        var item = klass.createMenuItem(this, "apwalfr_action", "apwalfr.onSetDefault(this)");
        if (item.getAttribute("value") == value) {
             item.setAttribute('checked', 'true');
-            document.getElementById("default-action-apwalfr").setAttribute('label', 'Default action: '+item.getAttribute("label"));
+            klass.setDefaultLabel(item);
        }
        menu.appendChild(item);
     });
@@ -86,17 +90,17 @@ var apwalfr = {
     var klass = this;
 
     var value = klass.getPref('default_action');
-    for (var item = obj.firstitem; item; item = item.nextSibling) {
+    for (var item = obj.firstChild; item; item = item.nextSibling) {
         if (item.getAttribute('value') == value) {
             item.setAttribute('checked', 'true');
-            document.getElementById("default-action-apwalfr").setAttribute('label', 'Default action: '+item.getAttribute("label"));
+            klass.setDefaultLabel(item);
         }
     }
   },
 
   onSetDefault: function(obj) {
     this.setPref('default_action', obj.getAttribute('value'));
-    document.getElementById("default-action-apwalfr").setAttribute('label', 'Default action: '+obj.getAttribute("label"));
+    this.setDefaultLabel(item);
   },
 
   onMenuItemCommand: function(obj, event) {
@@ -104,9 +108,6 @@ var apwalfr = {
     var doc = window.content.document;
     var server = this.getPref('server');
     this.doc = doc;
-
-    if (jQuery('script[src="'+server+'/_static/api.js"]', doc).length == 0)
-        this.addScript('/_static/api.js');
 
     if (event.button != 0)
         return;
@@ -142,11 +143,14 @@ var apwalfr = {
   onQuick: function(obj, type) {
     if (!type)
        type = obj.getAttribute("value");
+    var doc = this.doc;
     var url = null;
     jQuery.each(this.sites, function() {
         if (this[0] == type) url = this[2];
     });
-    this.addScript('/json/?callback=apwal.quickPost&arg='+encodeURIComponent(url)+'&url='+encodeURIComponent(this.doc.location.href));
+    this.getJSON('/json/?&url='+encodeURIComponent(this.doc.location.href), function(data) {
+        doc.location.href = url.replace('$t', encodeURIComponent(doc.title)).replace('$u', encodeURIComponent(data['new_url']));
+    });
   },
 
   onShowStats: function(obj) {
@@ -154,12 +158,22 @@ var apwalfr = {
     var doc = this.doc;
     var server = this.getPref('server');
     jQuery('a.apwalfr_link', doc).remove();
-    jQuery('a[href^="'+server+'/"]', doc).each(function() {
+    var ids = {};
+    jQuery('a[href^="'+server+'/"]', doc.body).each(function() {
             var link = jQuery(this);
             var id = link.attr('href').replace(server+'/', '');
-            link.after(' <a id="apwalfr_'+id+'" class="apwalfr_link" href="'+server+'/stats/'+id+'" target="_blank"></a>');
-            klass.addScript('/json/stats/?callback=apwal.showStats&alias='+id);
+            ids[id] = true;
     });
+    for (id in ids) {
+        this.getJSON('/json/stats/?alias='+id, function(data) {
+            var count = data['count'];
+            var title = count+' Hits for '+data['alias']+' - '+data['url'];
+            jQuery('a[href="'+server+'/'+data['alias']+'"]', doc).each(function() {
+                var link = jQuery(this);
+                link.after(' <a href="'+server+'/stats/'+data['alias']+'" class="apwalfr_link" title="'+title+'" target="_blank">('+count+')</a>');
+            });
+        });
+    }
   }
 
 }
