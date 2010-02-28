@@ -52,7 +52,7 @@
   <div id="footer-content">
   <div>
     &copy; Copyright 2009 <a href="http://www.gawel.org/">Gael Pasgrimaud</a> |
-    Powered by: <a href="#">AuPoil</a> | 
+    Powered by: <a href="http://www.gawel.org/docs/AuPoil/">AuPoil</a> | 
     Hosted by: <a href="http://www.toonux.org">Toonux</a> |
     Design by: <a href="http://www.styleshout.com/">styleshout</a> |
     Valid <a href="http://validator.w3.org/check/referer">XHTML</a> |

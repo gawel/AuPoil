@@ -168,7 +168,10 @@ class AuPoilApp(object):
     @session
     def redirect(self, req, Session=None):
         path_info = req.path_info.strip('/')
-        alias = path_info.decode('utf-8')
+        try:
+            alias = path_info.decode('utf-8')
+        except UnicodeDecodeError:
+            alias = path_info.decode('iso-8859-1')
         url = Session.query(Url).get(alias)
         if url is not None:
             if req.method.lower() == 'get':
