@@ -26,8 +26,11 @@ def main():
         result = url.stats(value, options.alias, options.server)
         if 'stats' in result:
             print 'Stats for %(alias)s - %(url)s' % result
+            count = 0
             for i in result.get('stats', []):
-                print '%(referer)30s\t%(count)5s' % i
+                print '%(referer)-35.35s : %(count)5s' % i
+                count += i['count']
+            print '%(referer)-35.35s : %(count)5s' % dict(referer='Total', count=count)
         elif result.get('error'):
             print result['error']
     elif value:
