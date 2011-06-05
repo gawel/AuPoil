@@ -4,7 +4,7 @@ from aupoil import meta
 import random
 import string
 
-valid_chars = string.digits+string.ascii_letters
+valid_chars = string.digits+string.ascii_letters+':'
 valid_unicode = [unicode(c, 'utf-8') for c in valid_chars]
 
 def random_alias(min_max=[4, 6]):
