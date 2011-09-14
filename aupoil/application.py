@@ -54,6 +54,7 @@ class AuPoilApp(object):
                             default_filters=['decode.utf8'])
         self.index = self.templates.get_template('/index.mako')
         self.stats = self.templates.get_template('/stats.mako')
+        self.redirect_url = conf.get('redirect_url', None)
 
     @session
     def add(self, req, url=None, alias=None, Session=None):
@@ -154,8 +155,9 @@ class AuPoilApp(object):
             else:
                 c = Params(error='You must provide an url !')
 
-        callback = req.params.get('callback')
+        callback =req.params.get('callback')
         if callback:
+            callback = str(callback)
             arg = req.params.get('arg')
             if arg:
                 resp.body = '%s(%s, %s);' % (callback, simplejson.dumps(arg), simplejson.dumps(c))
@@ -196,8 +198,10 @@ class AuPoilApp(object):
             if alias:
                 alias = '/'.join(alias)
                 resp.body = self.stats.render(c=get_stats(alias))
-        elif path_info:
+        elif path_info and path_info != 'new':
             resp = self.redirect(req)
+        elif not path_info and self.redirect_url:
+            resp = exc.HTTPFound(location=self.redirect_url)
         else:
             resp = Response()
             resp.content_type = 'text/html'
