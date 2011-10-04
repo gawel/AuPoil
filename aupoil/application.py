@@ -12,9 +12,13 @@ from aupoil.utils import session
 from aupoil.utils import valid_chars
 from aupoil.utils import random_alias
 from urlparse import urlparse
-import json
 import urllib
 import os
+
+try:
+    import json
+except ImportError:
+    import simplejson as json
 
 dirname = os.path.dirname(__file__)
 
