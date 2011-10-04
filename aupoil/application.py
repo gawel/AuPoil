@@ -12,7 +12,7 @@ from aupoil.utils import session
 from aupoil.utils import valid_chars
 from aupoil.utils import random_alias
 from urlparse import urlparse
-import simplejson
+import json
 import urllib
 import os
 
@@ -161,11 +161,11 @@ class AuPoilApp(object):
             callback = str(callback)
             arg = req.params.get('arg')
             if arg:
-                resp.body = '%s(%s, %s);' % (callback, simplejson.dumps(arg), simplejson.dumps(c))
+                resp.body = '%s(%s, %s);' % (callback, json.dumps(arg), json.dumps(c))
             else:
-                resp.body = '%s(%s);' % (callback, simplejson.dumps(c))
+                resp.body = '%s(%s);' % (callback, json.dumps(c))
         else:
-            resp.body = simplejson.dumps(c)
+            resp.body = json.dumps(c)
         return resp
 
     @session

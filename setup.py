@@ -27,8 +27,6 @@ setup(name='AuPoil',
           'WebOb',
           'Mako',
           'SQLAlchemy>=0.5.0',
-          'pysqlite',
-          'simplejson',
       ],
       entry_points="""
       # -*- Entry points: -*-
