@@ -191,6 +191,9 @@ class AuPoilApp(object):
                 Session.add(record)
                 Session.commit()
             resp = exc.HTTPMovedPermanently(location=url.url.encode('utf-8'))
+        elif self.redirect_url:
+            url = '%s/%s' % (self.redirect_url, path_info)
+            resp = exc.HTTPMovedPermanently(location=url)
         else:
             resp = exc.HTTPNotFound('This url does not exist')
         return resp
