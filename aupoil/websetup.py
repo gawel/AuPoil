@@ -2,6 +2,7 @@
 from sqlalchemy import engine_from_config
 from aupoil import meta
 from aupoil import model
+import os
 
 def setup_app(command, conf, vars):
     if 'MYSQL_URL' in os.environ:
