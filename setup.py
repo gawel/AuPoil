@@ -26,7 +26,7 @@ setup(name='AuPoil',
           'PasteScript',
           'WebOb',
           'Mako',
-          'SQLAlchemy>=0.5.0',
+          'SQLAlchemy',
       ],
       entry_points="""
       # -*- Entry points: -*-
