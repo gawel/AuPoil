@@ -2,7 +2,10 @@ from paste.request import resolve_relative_url
 from mako.lookup import TemplateLookup
 import sqlalchemy as sa
 from sqlalchemy import orm
-from sqlalchemy import exc as saexc
+try:
+    from sqlalchemy import exc as saexc
+except ImportError:
+    from sqlalchemy import exceptions as saexc
 from webob import Request, Response, exc
 from aupoil import meta
 from aupoil.model import Url
