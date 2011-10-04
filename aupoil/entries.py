@@ -13,6 +13,8 @@ class AuPoilInstaller(Installer):
     pass
 
 def make_app(global_conf, **conf):
+    if 'MYSQL_URL' in os.environ:
+        conf['sqlalchemy.url'] = os.environ['MYSQL_URL']
     engine = engine_from_config(conf, 'sqlalchemy.')
     meta.engine = engine
     meta.metadata.bind = engine
