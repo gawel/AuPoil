@@ -62,7 +62,6 @@ class AuPoilApp(object):
         self.index = self.templates.get_template('/index.mako')
         self.stats = self.templates.get_template('/stats.mako')
         self.redirect_url = conf.get('redirect_url', None)
-        self.stats_on = conf.get('stats', 'on') == 'on'
 
     @session
     def add(self, req, url=None, alias=None, Session=None):
@@ -184,7 +183,7 @@ class AuPoilApp(object):
             alias = path_info.decode('iso-8859-1')
         url = Session.query(Url).get(alias)
         if url is not None:
-            if req.method.lower() == 'get' and self.stats_on:
+            if req.method.lower() == 'get':
                 record = Stat()
                 record.alias = alias
                 record.referer = req.environ.get('HTTP_REFERER', 'UNKOWN').decode('utf-8')
